@@ -1,0 +1,3 @@
+C:/Users/Administrateur/CLionProjects/BIM/cmake-build-debug/CMakeFiles/BIM.dir
+C:/Users/Administrateur/CLionProjects/BIM/cmake-build-debug/CMakeFiles/edit_cache.dir
+C:/Users/Administrateur/CLionProjects/BIM/cmake-build-debug/CMakeFiles/rebuild_cache.dir
