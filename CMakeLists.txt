@@ -25,7 +25,7 @@ include(${wxWidgets_USE_FILE})
 find_package(Boost 1.80.0 COMPONENTS json serialization REQUIRED)
 include_directories(${Boost_INCLUDE_DIRS})
 
-add_executable(BIM main.cpp)
+add_executable(BIM main.cpp classes/Compte.cpp classes/Compte.h classes/Client.cpp classes/Client.h)
 
 if(MSVC)
     set_target_properties(BIM PROPERTIES LINK_FLAGS /SUBSYSTEM:WINDOWS)
