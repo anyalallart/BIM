@@ -18,8 +18,6 @@ using namespace std;
 
 class Compte {
 private:
-    Compte(string client, string type, string ref_banque);
-
     boost::uuids::uuid id;
     boost::uuids::uuid num_client;
     string type;

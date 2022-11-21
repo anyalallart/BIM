@@ -37,4 +37,12 @@ public:
     string get_numero_tel();
     string get_mail();
 
+    void set_nom(string nom);
+    void set_prenom(string prenom);
+    void set_adresse(string adresse);
+    void set_numero_tel(string numero_tel);
+    void set_mail(string mail);
+
+
+
 };
