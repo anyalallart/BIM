@@ -34,3 +34,33 @@ int main(){
 
 
 };
+
+/*#include "socket/Client.h"
+#include "socket/Message.h"
+
+#include <iostream>
+
+using namespace std;
+
+int main()
+{
+    Client client;
+
+    client.connect("127.0.0.1", 8000);
+
+    while (1)
+    {
+        if (client.isConnected() && !client.receive().empty())
+        {
+            cout << "Message Received !" << endl;
+
+            Message msg;
+            msg.header.type = messageTypes::TEST;
+            std::string test = "Test bonjour 12345";
+            msg << test;
+            cout << msg.header.size << endl;
+            client.send(msg);
+        }
+    }
+    return 0;
+}*/

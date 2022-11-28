@@ -38,7 +38,7 @@ public:
         disconnect();
     }
 
-    bool Connect(const std::string& host, const uint16_t port)
+    bool connect(const std::string& host, const uint16_t port)
     {
         try
         {

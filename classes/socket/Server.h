@@ -8,6 +8,7 @@
 #include <boost/asio.hpp>
 #include <boost/uuid/uuid.hpp>
 #include <vector>
+#include <iostream>
 
 #include "Connection.h"
 #include "Message.h"
@@ -24,6 +25,7 @@ protected:
     io_context context;
     std::thread thrContext;
     ip::tcp::acceptor acceptor;
+    int uid = 10000;
 
 public:
     Server(uint16_t port): acceptor(context, ip::tcp::endpoint(ip::tcp::v4(), port))
@@ -74,7 +76,7 @@ public:
                     {
                         validatedConnections.push_back(std::move(newConnection));
 
-                        validatedConnections.back()->connectToClient(/* TODO: ADD UID FROM DATABASE */);
+                        validatedConnections.back()->connectToClient(uid++/* TODO: ADD UID FROM DATABASE */);
                     }
 
                 }
@@ -152,7 +154,12 @@ public:
 protected:
     bool onClientConnect(std::shared_ptr<Connection> client)
     {
-        // TODO : Fill
+        std::cout << "Trying to connect to client" << std::endl;
+        Message msg;
+
+        msg.header.type = messageTypes::ServerAccept;
+        client->send(msg);
+        return true;
     }
 
     void onClientDisconnect(std::shared_ptr<Connection> client)
@@ -162,7 +169,7 @@ protected:
 
     void onMessage(std::shared_ptr<Connection> client, Message& msg)
     {
-        // TODO : Fill
+        std::cout << msg.header.size << std::endl;
     }
 
 };

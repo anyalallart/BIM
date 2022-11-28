@@ -10,22 +10,24 @@
 #include <vector>
 #include <memory>
 #include <ostream>
+
 #include "Connection.h"
 
 enum class messageTypes: uint32_t
 {
-
+    TEST,
+    ServerAccept
 };
 
 struct header {
     boost::uuids::uuid ID;
     messageTypes type;
-    uint32_t size;
+    uint32_t size = 0;
 };
 
 struct Message {
     header header;
-    std::vector<std::string> body;
+    std::vector<uint8_t> body;
 
     size_t size() const
     {
@@ -40,11 +42,13 @@ struct Message {
 
     friend Message& operator << (Message& msg, std::string& str)
     {
-        size_t i = msg.body.size();
-        msg.body.resize(i + sizeof(std::string));
+        size_t size = msg.body.size();
 
-        std::memcpy(msg.body.data() + i, &str, sizeof(std::string));
+        std::vector vec(str.begin(), str.end());
 
+        msg.body.resize(size + vec.size());
+
+        msg.body.insert(msg.body.begin() + size, vec.begin(), vec.end());
         msg.header.size = msg.size();
 
         return msg;
@@ -54,15 +58,23 @@ struct Message {
     {
         size_t i = msg.body.size() - sizeof(std::string);
 
-        std::memcpy(&str, msg.body.data() + i, sizeof(std::string));
+        std::vector<uint8_t> vec;
+
+        std::memcpy(&vec, msg.body.data() + i, sizeof(uint8_t));
 
         msg.body.resize(i);
 
-        msg.header.size = msg.size();
+        std::string new_str(vec.begin(), vec.end());
+
+        str = new_str;
+
+        msg.header.size = msg.body.size();
 
         return msg;
     }
 };
+
+class Connection;
 
 struct InputMessage {
     std::shared_ptr<Connection> remote = nullptr;
@@ -74,6 +86,4 @@ struct InputMessage {
         return os;
     }
 };
-
-
 #endif //BIM_MESSAGE_H

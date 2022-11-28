@@ -23,7 +23,9 @@ protected:
     Message asyncMessageTmp;
     bool isServer;
 
-    boost::uuids::uuid id{};
+    /*boost::uuids::uuid id{};*/
+
+    int id;
 
 
 public:
@@ -40,13 +42,13 @@ public:
         disconnect();
     }
 
-    boost::uuids::uuid getId()
+    /*boost::uuids::uuid*/int getId()
     {
         return id;
     }
 
 public:
-    void connectToClient(boost::uuids::uuid uid)
+    void connectToClient(/*boost::uuids::uuid uid*/ int uid)
     {
         if (isServer && socket.is_open())
         {

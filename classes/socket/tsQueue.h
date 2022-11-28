@@ -38,7 +38,7 @@ public:
         return t;
     }
 
-    T push(const T& item)
+    void push(const T& item)
     {
         std::scoped_lock lock(mutexQueue_);
         queue_.push(std::move(item));

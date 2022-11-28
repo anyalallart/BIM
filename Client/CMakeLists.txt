@@ -29,7 +29,9 @@ add_executable(BIM_Client main.cpp ../classes/Compte.cpp ../classes/Compte.h ../
 
 set_property(TARGET BIM_Client PROPERTY CXX_STANDARD 17)
 
-target_link_libraries (BIM_Client LINK_PUBLIC ${Boost_LIBRARIES} ${wxWidgets_LIBRARIES})
+if(MSVC)
+    set_target_properties(BIM_Client PROPERTIES LINK_FLAGS /SUBSYSTEM:WINDOWS)
+    set_property(TARGET BIM_Client PROPERTY MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
+endif (MSVC)
 
-
-
+target_link_libraries (BIM_Client ${Boost_LIBRARIES} ${wxWidgets_LIBRARIES})
