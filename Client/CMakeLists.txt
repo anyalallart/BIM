@@ -25,13 +25,9 @@ include_directories(${Boost_INCLUDE_DIRS})
 find_package(wxWidgets REQUIRED COMPONENTS net core base)
 include(${wxWidgets_USE_FILE})
 
-add_executable(BIM_Client main.cpp ../classes/Compte.cpp ../classes/Compte.h ../classes/Client.cpp ../classes/Client.h ../classes/socket/tsQueue.h ../classes/socket/Message.h ../classes/socket/Connection.h ../classes/socket/Client.h ../classes/socket/Server.h)
+add_executable(BIM_Client main.cpp ../classes/Compte.cpp ../classes/Compte.h ../classes/Client.cpp ../classes/Client.h ../classes/socket/tsQueue.h ../classes/socket/Message.h ../classes/socket/Connection.h ../classes/socket/Client.h ../classes/socket/Server.h ../classes/json/json.h)
 
 set_property(TARGET BIM_Client PROPERTY CXX_STANDARD 17)
-
-if(MSVC)
-    set_target_properties(BIM_Client PROPERTIES LINK_FLAGS /SUBSYSTEM:WINDOWS)
-endif (MSVC)
 
 target_link_libraries (BIM_Client LINK_PUBLIC ${Boost_LIBRARIES} ${wxWidgets_LIBRARIES})
 

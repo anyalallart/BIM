@@ -16,6 +16,9 @@
 #include <iostream>
 #include <ostream>
 
+#include <map>
+
+
 using namespace std;
 
 class Client{
@@ -42,6 +45,7 @@ public:
     void set_adresse(string adresse);
     void set_numero_tel(string numero_tel);
     void set_mail(string mail);
+
 
 
 
