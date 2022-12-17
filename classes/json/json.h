@@ -33,7 +33,7 @@ public:
 
         pt::read_json(this->nomfichier, root);
 
-        T info = root.get<T>(recup, typename T);
+        T info = root.get<T>(recup);
 
         return (info);
     }
@@ -43,11 +43,9 @@ public:
         root.put(id+"."+champ, value);
 
         pt::write_json(this->nomfichier, root);
-
-
     }
 
-    T creer(class client ){
+    T ajouter(const T& item) {
 
     }
 

@@ -10,9 +10,12 @@
 #include <vector>
 #include <iostream>
 
+#include <sqlite3.h>
+
 #include "Connection.h"
 #include "Message.h"
 #include "tsQueue.h"
+#include "../database/DB.h"
 
 using namespace boost::asio;
 
@@ -169,7 +172,11 @@ protected:
 
     void onMessage(std::shared_ptr<Connection> client, Message& msg)
     {
-        std::cout << msg.header.size << std::endl;
+        switch (msg.header.type) {
+            case messageTypes::ClientAskConnection:
+
+                break;
+        }
     }
 
 };

@@ -15,8 +15,9 @@
 
 enum class messageTypes: uint32_t
 {
-    TEST,
-    ServerAccept
+    ServerAccept,
+    ClientAskConnection,
+    ServerRespondAskConnection,
 };
 
 struct header {
