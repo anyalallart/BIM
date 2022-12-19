@@ -32,7 +32,7 @@ struct Message {
 
     size_t size() const
     {
-        return sizeof(header) + body.size();
+        return body.size();
     }
 
     friend std::ostream& operator << (std::ostream& os, const Message& msg)

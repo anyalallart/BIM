@@ -156,6 +156,7 @@ private:
         async_read(socket, buffer(&asyncMessageTmp.header, sizeof(header)),
            [this](std::error_code ec, size_t length)
            {
+
                 if (!ec)
                 {
                     if (asyncMessageTmp.header.size > 0)

@@ -49,7 +49,6 @@ public:
         }
         catch (std::exception& e)
         {
-            std::cerr << "Server : " << e.what() << "\n";
             return false;
         }
 
@@ -174,6 +173,9 @@ protected:
     {
         switch (msg.header.type) {
             case messageTypes::ClientAskConnection:
+                DB database("../database_serveur.db");
+
+                database.select("SELECT * FROM banque");
 
                 break;
         }

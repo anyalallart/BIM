@@ -18,12 +18,16 @@ find_package(Boost REQUIRED COMPONENTS json serialization)
 find_package(wxWidgets CONFIG REQUIRED COMPONENTS core base net)
 find_package(unofficial-sqlite3 REQUIRED)
 
-add_executable(BIM_Client ../classes/socket/tsQueue.h ../classes/socket/Message.h ../classes/socket/Connection.h ../classes/socket/Client.h ../classes/socket/Server.h ../classes/json/json.h Design/main.cpp Design/main.h
+add_executable(BIM_Client ../classes/socket/tsQueue.h ../classes/socket/Message.h ../classes/socket/Connection.h ../classes/socket/Client.h ../classes/socket/Server.h Design/main.cpp Design/main.h
         Design/accueil.cpp Design/accueil.h Design/connexion.cpp Design/connexion.h Design/crea.cpp Design/crea.h Design/info_compt.cpp Design/info_compt.h Design/virement.cpp Design/virement.h)
+#add_executable(BIM_Client main.cpp ../classes/socket/tsQueue.h ../classes/socket/Message.h ../classes/socket/Connection.h ../classes/socket/Client.h ../classes/socket/Server.h)
+
 set_property(TARGET BIM_Client PROPERTY CXX_STANDARD 17)
 
 if(MSVC)
     set_target_properties(BIM_Client PROPERTIES LINK_FLAGS /SUBSYSTEM:WINDOWS)
+    #set_target_properties(BIM_Client PROPERTIES LINK_FLAGS /SUBSYSTEM:CONSOLE)
+
     set_property(TARGET BIM_Client PROPERTY MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
 endif (MSVC)
 

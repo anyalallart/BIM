@@ -53,7 +53,6 @@ public:
         }
         catch (std::exception& e)
         {
-            std::cerr << "Client : " << e.what() << "\n";
             return false;
         }
 
