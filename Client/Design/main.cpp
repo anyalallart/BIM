@@ -13,7 +13,6 @@ IMPLEMENT_APP(TMyApp)
 bool TMyApp::OnInit() {
     client.connect("127.0.0.1", 8000);
 
-
     TMyFrame *frame = new TMyFrame("Banque Isen Mondiale",
                                    wxPoint(150, 150), wxSize(480, 360));
     frame->Show(true);
@@ -48,11 +47,34 @@ void TMyFrame::OnClick_1(wxCommandEvent& WXUNUSED(event)){
         std::string payload = "1";
         msg << payload;
         wxGetApp().client.send(msg);
-    }
 
-    //Close();
-    //TCo *cone = new TCo("Banque Isen Mondiale",wxPoint(150, 150), wxSize(480, 360));
-    //cone->Show(true);
+        bool waitingResponse = true;
+
+        while (waitingResponse)
+        {
+            if (!wxGetApp().client.receive().empty())
+            {
+                auto msg = wxGetApp().client.receive().pop().message;
+
+                switch (msg.header.type)
+                {
+                    case messageTypes::ServerRespondAskConnection:
+                        if (stoi(std::string(msg.body.begin(), msg.body.end() - 1)) == 1)
+                        {
+                            Close();
+                            TCo *cone = new TCo("Banque Isen Mondiale",wxPoint(150, 150), wxSize(480, 360));
+                            cone->Show(true);
+                        }
+                        else
+                        {
+                            wxMessageBox( wxT("Agence introuvable"), wxT("BIM"), wxICON_ERROR);
+                        }
+                        waitingResponse = false;
+                        break;
+                }
+            }
+        }
+    }
 }
 
 void TMyFrame::OnClick_2(wxCommandEvent &event) {
@@ -63,11 +85,34 @@ void TMyFrame::OnClick_2(wxCommandEvent &event) {
         std::string payload = "2";
         msg << payload;
         wxGetApp().client.send(msg);
-    }
 
-    Close();
-    TCo *cone = new TCo("Banque Isen Mondiale",wxPoint(150, 150), wxSize(480, 360));
-    cone->Show(true);
+        bool waitingResponse = true;
+
+        while (waitingResponse)
+        {
+            if (!wxGetApp().client.receive().empty())
+            {
+                auto msg = wxGetApp().client.receive().pop().message;
+
+                switch (msg.header.type)
+                {
+                    case messageTypes::ServerRespondAskConnection:
+                        if (stoi(std::string(msg.body.begin(), msg.body.end() - 1)) == 1)
+                        {
+                            Close();
+                            TCo *cone = new TCo("Banque Isen Mondiale",wxPoint(150, 150), wxSize(480, 360));
+                            cone->Show(true);
+                        }
+                        else
+                        {
+                            wxMessageBox( wxT("Agence introuvable"), wxT("BIM"), wxICON_ERROR);
+                        }
+                        waitingResponse = false;
+                        break;
+                }
+            }
+        }
+    }
 }
 
 void TMyFrame::OnClick_3(wxCommandEvent &event) {
@@ -78,11 +123,34 @@ void TMyFrame::OnClick_3(wxCommandEvent &event) {
         std::string payload = "3";
         msg << payload;
         wxGetApp().client.send(msg);
-    }
 
-    Close();
-    TCo *cone = new TCo("Banque Isen Mondiale",wxPoint(150, 150), wxSize(480, 360));
-    cone->Show(true);
+        bool waitingResponse = true;
+
+        while (waitingResponse)
+        {
+            if (!wxGetApp().client.receive().empty())
+            {
+                auto msg = wxGetApp().client.receive().pop().message;
+
+                switch (msg.header.type)
+                {
+                    case messageTypes::ServerRespondAskConnection:
+                        if (stoi(std::string(msg.body.begin(), msg.body.end() - 1)) == 1)
+                        {
+                            Close();
+                            TCo *cone = new TCo("Banque Isen Mondiale",wxPoint(150, 150), wxSize(480, 360));
+                            cone->Show(true);
+                        }
+                        else
+                        {
+                            wxMessageBox( wxT("Agence introuvable"), wxT("BIM"), wxICON_ERROR);
+                        }
+                        waitingResponse = false;
+                        break;
+                }
+            }
+        }
+    }
 }
 
 //------------------------------------------------------------------------------

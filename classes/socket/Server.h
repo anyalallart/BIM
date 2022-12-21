@@ -8,6 +8,7 @@
 #include <boost/asio.hpp>
 #include <boost/uuid/uuid.hpp>
 #include <vector>
+#include <map>
 #include <iostream>
 
 #include <sqlite3.h>
@@ -169,13 +170,35 @@ protected:
         // TODO : Fill
     }
 
-    void onMessage(std::shared_ptr<Connection> client, Message& msg)
+    void onMessage(const std::shared_ptr<Connection>& client, Message& msg)
     {
         switch (msg.header.type) {
             case messageTypes::ClientAskConnection:
+
+                std::string agenceID = std::string(msg.body.begin(), msg.body.end() - 1);
+
+                std::string sql = "SELECT * FROM banque WHERE id='" + agenceID + "'";
+
                 DB database("../database_serveur.db");
 
-                database.select("SELECT * FROM banque");
+                std::vector<std::map<std::string, std::string>> result = database.select(sql);
+
+                if (!result.empty())
+                {
+                    Message resp;
+                    resp.header.type = messageTypes::ServerRespondAskConnection;
+                    std::string payload = "1";
+                    resp << payload;
+                    client->send(resp);
+                }
+                else
+                {
+                    Message resp;
+                    resp.header.type = messageTypes::ServerRespondAskConnection;
+                    std::string payload = "0";
+                    resp << payload;
+                    client->send(resp);
+                }
 
                 break;
         }

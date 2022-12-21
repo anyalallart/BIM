@@ -9,7 +9,7 @@ if(MSVC)
     set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} /MT")
     set(Boost_USE_STATIC_RUNTIME ON)
 
-    add_compile_options($<$<CONFIG:Release>:/MT> # Runtime library: Multi-threaded
+    add_compile_options($<$<CONFIG:Release>:/MT>     # Runtime library: Multi-threaded
             $<$<CONFIG:Debug>:/MTd> # Runtime library: Multi-threaded Debug
             )
 endif (MSVC)

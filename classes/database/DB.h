@@ -54,8 +54,6 @@ public:
 
         rc = sqlite3_exec(db, request.c_str(), callbackSelect, &result, &zErrMsg);
 
-        std::cout << "ID : " << result[0]["id"] << " Nom : " << result[0]["nom"] << " Lieu : " << result[0]["lieu"] << std::endl;
-
         if( rc != SQLITE_OK ) {
             fprintf(stderr, "SQL error: %s\n", zErrMsg);
             sqlite3_free(zErrMsg);
