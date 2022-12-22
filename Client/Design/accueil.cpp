@@ -8,6 +8,8 @@ TAcc::TAcc(const wxString& title, const wxPoint& pos, const wxSize& size,
                    long style) : wxFrame(nullptr, -1, title, pos, size, style) {
 
     Centre();
+    SetBackgroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_BTNFACE));
+
     auto *txt = new wxStaticText(this, -1, _T("Voici vos comptes :"), wxPoint(80,20));
 
     for (int i = 1; i < 4; i++) {
@@ -28,9 +30,8 @@ TAcc::TAcc(const wxString& title, const wxPoint& pos, const wxSize& size,
 }
 
 void TAcc::OnButtonClick(wxCommandEvent& evt) {
-    //int buttonId = evt.GetId() - FIRST_BUTTON_ID;
     Close();
-    TInf *info = new TInf("Info compte", wxPoint(150, 150), wxSize(480, 360));
+    TInf *info = new TInf("Informations compte");
     info->Show(true);
 }
 
@@ -39,8 +40,4 @@ void TAcc::Vir(wxCommandEvent &evt) {
     TVir *vir = new TVir("Virement");
     vir->Show(true);
 }
-
-
-
-
 

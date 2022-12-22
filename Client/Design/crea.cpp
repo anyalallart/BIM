@@ -20,36 +20,36 @@ TCrea_c::TCrea_c(const wxString& title, const wxPoint& pos, const wxSize& size,
     Conn = new wxButton(this,BUTTON_CREATION,"Connexion", wxPoint(20,100),
                         wxDefaultSize);
 
-    auto *labelPrenom = new wxStaticText(this, -1, _T("Prénom :"), wxPoint(160,20));
+    auto *labelPrenom = new wxStaticText(this, -1, _T("Prenom :"), wxPoint(160,20));
 
     // wxTextCtrl pour le prenom
-    txt_pren = new wxTextCtrl(this, ID_TXT_PRENOM, _T(""), wxPoint(160,40));
+    txt_pren = new wxTextCtrl(this, ID_TXT_PRENOM, _T(""), wxPoint(160,40), wxSize(250, wxDefaultSize.GetHeight()));
 
     auto *labelNom = new wxStaticText(this, -1, _T("Nom :"), wxPoint(160,70));
 
     // wxTextCtrl pour le nom
-    txt_nom = new wxTextCtrl(this, ID_TXT_NOM, _T(""), wxPoint(160,90));
+    txt_nom = new wxTextCtrl(this, ID_TXT_NOM, _T(""), wxPoint(160,90), wxSize(250, wxDefaultSize.GetHeight()));
 
     auto *labelAdresse = new wxStaticText(this, -1, _T("Adresse :"), wxPoint(160,120));
 
     // wxTextCtrl pour le adresse
-    txt_adresse = new wxTextCtrl(this, ID_TXT_ADRESSE, _T(""), wxPoint(160,140));
+    txt_adresse = new wxTextCtrl(this, ID_TXT_ADRESSE, _T(""), wxPoint(160,140), wxSize(250, wxDefaultSize.GetHeight()));
 
-    auto *labelTel = new wxStaticText(this, -1,  _("Numéro de téléphone :"), wxPoint(160,170));
+    auto *labelTel = new wxStaticText(this, -1,  _("Numero de telephone :"), wxPoint(160,170));
 
     // wxTextCtrl pour le tel
-    txt_tel = new wxTextCtrl(this, ID_TXT_TEL, _T(""), wxPoint(160,190));
+    txt_tel = new wxTextCtrl(this, ID_TXT_TEL, _T(""), wxPoint(160,190), wxSize(250, wxDefaultSize.GetHeight()));
 
     auto *labelMail = new wxStaticText(this, -1, _T("Mail :"), wxPoint(160,220));
 
     // wxTextCtrl pour le mail
-    txt_mail = new wxTextCtrl(this, ID_TXT_MAIL_CREA, _T(""), wxPoint(160,240));
+    txt_mail = new wxTextCtrl(this, ID_TXT_MAIL_CREA, _T(""), wxPoint(160,240), wxSize(250, wxDefaultSize.GetHeight()));
 
     // wxStaticText pour le mdp
-    auto *labelMdp = new wxStaticText(this, -1, _T("Mot de passe:"), wxPoint(160,270));
+    auto *labelMdp = new wxStaticText(this, -1, _T("Mot de passe :"), wxPoint(160,270));
 
     // wxTextCtrl pour le mdp
-    txt_mdp = new wxTextCtrl(this, ID_TXT_MDP_CREA, _T(""), wxPoint(160,290));
+    txt_mdp = new wxTextCtrl(this, ID_TXT_MDP_CREA, _T(""), wxPoint(160,290), wxSize(250, wxDefaultSize.GetHeight()), wxTE_PASSWORD);
 }
 
 
@@ -71,13 +71,12 @@ void TCrea_c::Validation(wxCommandEvent &event) {
     if (txt_mail->IsEmpty()) bOK = false;
     if (txt_mdp->IsEmpty()) bOK = false;
     if (bOK) {
-        //wxMessageBox(txt_mail->GetValue() << _T(" ") << txt_mdp->GetValue(), _T("test"));
         Close();
         TAcc *accueil = new TAcc("Choix compte",wxPoint(150, 150), wxSize(480, 360));
         accueil->Show(true);
     }
     else
-        int reponse = wxMessageBox(_T("Veuillez remplir les informations"),_T("NON"));
+        int reponse = wxMessageBox(_T("Veuillez remplir les informations"),wxT("BIM"), wxICON_ERROR);
 }
 
 //------------------------------------------------------------------------------

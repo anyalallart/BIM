@@ -34,7 +34,6 @@ TCo::TCo(const wxString& title, const wxPoint& pos, const wxSize& size,
 
     // wxTextCtrl pour le mdp
     txt_mdp = new wxTextCtrl(this, wxID_ANY, wxT(""), wxPoint(160,90), wxSize(250, wxDefaultSize.GetHeight()), wxTE_PASSWORD);
-    //txt_mdp = new wxPasswordEntryDialog( this, "Entrez votre mot de passe.", "Titre de la boîte de saisie.","", wxOK + wxCANCEL);
 
 }
 
@@ -58,19 +57,19 @@ void TCo::Validation(wxCommandEvent &event) {
     if (bOK){
         //wxMessageBox( txt_mail->GetValue() << _T(" ") << txt_mdp->GetValue(),_T("test"));
         Close();
-        TAcc *accueil = new TAcc("Choix compte",
+        TAcc *accueil = new TAcc("Vos comptes",
                                 wxPoint(150, 150), wxSize(480, 360));
         accueil->Show(true);
     }
     else
-        int reponse = wxMessageBox(_T("Veuillez remplir les informations"),_T("NON"));
+        wxMessageBox(_T("Veuillez remplir les informations"),wxT("BIM"), wxICON_ERROR);
 }
 
 //------------------------------------------------------------------------------
 void TCo::Creation(wxCommandEvent &event) {
     Close();
-    TCrea_c *crea = new TCrea_c("Création compte",
-                                        wxPoint(150, 150), wxSize(480, 360));
+    TCrea_c *crea = new TCrea_c("Creation compte",
+                                        wxPoint(150, 150), wxSize(480, 400));
     crea->Show(true);
 }
 
