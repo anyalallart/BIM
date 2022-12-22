@@ -22,9 +22,9 @@ TAcc::TAcc(const wxString& title, const wxPoint& pos, const wxSize& size,
 
         //auto *vir = new wxStaticText(this, -1, _T("Virements"), wxPoint(300,20));
 
-        Virement = new wxButton(this,BUTTON_VIREMENT,"Virement", wxPoint(300,80),
-                                wxSize (100, 40));
     }
+    Virement = new wxButton(this,BUTTON_VIREMENT,"Virement", wxPoint(300,80),
+                            wxSize (100, 40));
 }
 
 void TAcc::OnButtonClick(wxCommandEvent& evt) {
@@ -36,7 +36,7 @@ void TAcc::OnButtonClick(wxCommandEvent& evt) {
 
 void TAcc::Vir(wxCommandEvent &evt) {
     Close();
-    TVir *vir = new TVir("Virement",wxPoint(150, 150), wxSize(480, 360));
+    TVir *vir = new TVir("Virement");
     vir->Show(true);
 }
 
