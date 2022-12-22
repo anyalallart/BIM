@@ -1,7 +1,7 @@
 #include "virement.h"
 
 
-TVir::TVir(const wxString& title) : wxDialog(NULL, -1, title, wxDefaultPosition, wxDefaultSize)
+TVir::TVir(const wxString& title) : wxDialog(NULL, -1, title, wxDefaultPosition, wxSize(480, 360))
 {
  wxPanel *panel = new wxPanel(this, -1);
 
