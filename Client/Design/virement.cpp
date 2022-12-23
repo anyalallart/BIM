@@ -1,4 +1,4 @@
-#include "virement.h"
+#include "include.h"
 
 
 TVir::TVir(const wxString& title) : wxDialog(NULL, -1, title, wxDefaultPosition, wxSize(480, 460))

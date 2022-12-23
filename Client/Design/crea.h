@@ -1,6 +1,7 @@
 #include <vector>
 #include <map>
 #include <string>
+#include "wx/wx.h"
 
 #include "../../classes/helpers/Client.h"
 

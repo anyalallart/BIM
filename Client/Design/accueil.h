@@ -1,6 +1,4 @@
 #include "wx/wx.h"
-#include "virement.h"
-#include "info_compt.h"
 #include <string>
 
 //------------------------------------------------------------------------------

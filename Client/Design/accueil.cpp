@@ -1,4 +1,4 @@
-#include "accueil.h"
+#include "include.h"
 
 BEGIN_EVENT_TABLE(TAcc, wxFrame)
                 EVT_BUTTON(BUTTON_VIREMENT,  TAcc::Vir)

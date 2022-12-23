@@ -5,9 +5,6 @@
 #include "../../classes/socket/Client.h"
 #include "../../classes/socket/Message.h"
 
-#include "accueil.h"
-#include "connexion.h"
-
 //------------------------------------------------------------------------------
 class TMyApp : public wxApp
 {

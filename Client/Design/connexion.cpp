@@ -1,5 +1,4 @@
-#include "connexion.h"
-#include "crea.h"
+#include "include.h"
 
 //------------------------------------------------------------------------------
 
@@ -89,8 +88,8 @@ void TCo::Validation(wxCommandEvent &event) {
                             }
                             else
                             {
-                                int newDB = stoi(std::string(msg.body.begin(), msg.body.end() - 1))
-                                wxGetApp().database = *new DB("../database_client_" + newDB + ".db");
+                                int newDB = stoi(std::string(msg.body.begin(), msg.body.end() - 1));
+                                wxGetApp().database = *new DB("../database_client_" + std::to_string(newDB) + ".db");
 
                                 std::string request2 = "SELECT * FROM client WHERE mail='" + (std::string)txt_mail->GetValue() + "' AND mot_de_passe='" + (std::string)txt_mdp->GetValue() + "'";
                                 std::vector<std::map<std::string, std::string>> result2 = wxGetApp().database.select(request);

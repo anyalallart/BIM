@@ -1,5 +1,4 @@
-#include "crea.h"
-#include "connexion.h"
+#include "include.h"
 
 BEGIN_EVENT_TABLE(TCrea_c, wxFrame)
                 EVT_BUTTON(BUTTON_VALIDER,  TCrea_c::Validation)

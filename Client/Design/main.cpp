@@ -1,4 +1,4 @@
-#include "main.h"
+#include "include.h"
 
 BEGIN_EVENT_TABLE(TMyFrame, wxFrame)
                 EVT_BUTTON(BUTTON_AG1,  TMyFrame::OnClick_1)
