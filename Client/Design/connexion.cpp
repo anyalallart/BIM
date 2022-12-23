@@ -78,13 +78,13 @@ void TCo::Validation(wxCommandEvent &event) {
                 if (!wxGetApp().client.receive().empty())
                 {
                     auto msg = wxGetApp().client.receive().pop().message;
-
                     switch (msg.header.type)
                     {
-                        case messageTypes::ServerRespondAskConnection:
+                        case messageTypes::ServerRespondLogin:
                             if (stoi(std::string(msg.body.begin(), msg.body.end() - 1)) == -1)
                             {
                                 wxMessageBox( wxT("Ce compte n'existe pas"), wxT("BIM"), wxICON_ERROR);
+                                waitingResponse = false;
                             }
                             else
                             {
@@ -94,12 +94,13 @@ void TCo::Validation(wxCommandEvent &event) {
                                 std::string request2 = "SELECT * FROM client WHERE mail='" + (std::string)txt_mail->GetValue() + "' AND mot_de_passe='" + (std::string)txt_mdp->GetValue() + "'";
                                 std::vector<std::map<std::string, std::string>> result2 = wxGetApp().database.select(request);
                                 if (!result2.empty()) {
+                                    wxGetApp().user = helpers::Client(stoi(result2[0]["id"]), result2[0]["nom"], result2[0]["prenom"], result2[0]["adresse"], result2[0]["numero_tel"], result2[0]["mail"]);
                                     Close();
                                     TAcc *accueil = new TAcc("Choix compte", wxPoint(150, 150), wxSize(480, 360));
                                     accueil->Show(true);
                                 }
+                                waitingResponse = false;
                             }
-                            waitingResponse = false;
                             break;
                     }
                 }

@@ -205,7 +205,8 @@ protected:
             }
 
             case messageTypes::ClientAskLogin: {
-                std::string message = std::string(msg.body.begin(), msg.body.end() - 1);
+                std::string message = std::string(msg.body.begin(), msg.body.end() - 5);
+
                 size_t pos = message.find('|');
 
                 std::string email = message.substr(0, pos);

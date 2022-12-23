@@ -15,7 +15,7 @@ int main()
     while(1)
     {
         server.update(-1, true);
-        std::cout << "ouiz22222ddffDDDdd222" << std::endl;
+        std::cout << "oui222ddddddddddddddddd" << std::endl;
     }
 
     return 0;
