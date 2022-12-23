@@ -1,5 +1,9 @@
-#include "wx/wx.h"
-#include "accueil.h"
+#include <vector>
+#include <map>
+#include <string>
+
+#include "../../classes/helpers/Client.h"
+
 
 //------------------------------------------------------------------------------
 class TCrea_c : public wxFrame

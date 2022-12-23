@@ -1,17 +1,24 @@
 #include "wx/wx.h"
 #include <iostream>
-#include "connexion.h"
+#include "../../classes/helpers/Client.h"
 #include "../../classes/database/DB.h"
 #include "../../classes/socket/Client.h"
 #include "../../classes/socket/Message.h"
+
+#include "accueil.h"
+#include "connexion.h"
 
 //------------------------------------------------------------------------------
 class TMyApp : public wxApp
 {
 public:
     Client client;
+    DB database;
+    helpers::Client user;
     virtual bool OnInit();
 };
+
+DECLARE_APP(TMyApp)
 
 //------------------------------------------------------------------------------
 class TMyFrame : public wxFrame

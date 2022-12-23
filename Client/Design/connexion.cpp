@@ -54,12 +54,61 @@ void TCo::Validation(wxCommandEvent &event) {
     bool bOK = true;
     if (txt_mail->IsEmpty()) bOK = false;
     if (txt_mdp->IsEmpty()) bOK = false;
-    if (bOK){
+    if (bOK) {
+        std::string request = "SELECT * FROM client WHERE mail='" + (std::string)txt_mail->GetValue() + "' AND mot_de_passe='" + (std::string)txt_mdp->GetValue() + "'";
+        std::vector<std::map<std::string, std::string>> result = wxGetApp().database.select(request);
+        if (!result.empty())
+        {
+            wxGetApp().user = helpers::Client(stoi(result[0]["id"]), result[0]["nom"], result[0]["prenom"], result[0]["adresse"], result[0]["numero_tel"], result[0]["mail"]);
+            Close();
+            TAcc *accueil = new TAcc("Choix compte", wxPoint(150, 150), wxSize(480, 360));
+            accueil->Show(true);
+        }
+        else
+        {
+            Message msg;
+            msg.header.type = messageTypes::ClientAskLogin;
+            std::string payload = (std::string)txt_mail->GetValue() + "|" + (std::string)txt_mdp->GetValue();
+            msg << payload;
+            wxGetApp().client.send(msg);
+
+            bool waitingResponse = true;
+
+            while (waitingResponse)
+            {
+                if (!wxGetApp().client.receive().empty())
+                {
+                    auto msg = wxGetApp().client.receive().pop().message;
+
+                    switch (msg.header.type)
+                    {
+                        case messageTypes::ServerRespondAskConnection:
+                            if (stoi(std::string(msg.body.begin(), msg.body.end() - 1)) == -1)
+                            {
+                                wxMessageBox( wxT("Ce compte n'existe pas"), wxT("BIM"), wxICON_ERROR);
+                            }
+                            else
+                            {
+                                int newDB = stoi(std::string(msg.body.begin(), msg.body.end() - 1))
+                                wxGetApp().database = *new DB("../database_client_" + newDB + ".db");
+
+                                std::string request2 = "SELECT * FROM client WHERE mail='" + (std::string)txt_mail->GetValue() + "' AND mot_de_passe='" + (std::string)txt_mdp->GetValue() + "'";
+                                std::vector<std::map<std::string, std::string>> result2 = wxGetApp().database.select(request);
+                                if (!result2.empty()) {
+                                    Close();
+                                    TAcc *accueil = new TAcc("Choix compte", wxPoint(150, 150), wxSize(480, 360));
+                                    accueil->Show(true);
+                                }
+                            }
+                            waitingResponse = false;
+                            break;
+                    }
+                }
+            }
+
+        }
         //wxMessageBox( txt_mail->GetValue() << _T(" ") << txt_mdp->GetValue(),_T("test"));
-        Close();
-        TAcc *accueil = new TAcc("Vos comptes",
-                                wxPoint(150, 150), wxSize(480, 360));
-        accueil->Show(true);
+
     }
     else
         wxMessageBox(_T("Veuillez remplir les informations"),wxT("BIM"), wxICON_ERROR);

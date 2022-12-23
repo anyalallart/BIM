@@ -9,6 +9,7 @@
 #include <boost/uuid/uuid.hpp>
 #include <vector>
 #include <map>
+#include <string>
 #include <iostream>
 
 #include <sqlite3.h>
@@ -172,14 +173,14 @@ protected:
 
     void onMessage(const std::shared_ptr<Connection>& client, Message& msg)
     {
+        DB database("../database_serveur.db");
+
         switch (msg.header.type) {
-            case messageTypes::ClientAskConnection:
+            case messageTypes::ClientAskConnection: {
 
                 std::string agenceID = std::string(msg.body.begin(), msg.body.end() - 1);
 
                 std::string sql = "SELECT * FROM banque WHERE id='" + agenceID + "'";
-
-                DB database("../database_serveur.db");
 
                 std::vector<std::map<std::string, std::string>> result = database.select(sql);
 
@@ -201,6 +202,38 @@ protected:
                 }
 
                 break;
+            }
+
+            case messageTypes::ClientAskLogin: {
+                std::string message = std::string(msg.body.begin(), msg.body.end() - 1);
+                size_t pos = message.find('|');
+
+                std::string email = message.substr(0, pos);
+                message.erase(0, pos + 1);
+                std::string password = message;
+
+                std::string request = "SELECT * FROM client WHERE mail='" + email + "' AND mot_de_passe='" + password + "'";
+                std::vector<std::map<std::string, std::string>> result = database.select(request);
+                if (!result.empty())
+                {
+                    Message resp;
+                    resp.header.type = messageTypes::ServerRespondLogin;
+                    std::string payload = result[0]["ref_banque"];
+                    resp << payload;
+                    client->send(resp);
+                }
+                else
+                {
+                    Message resp;
+                    resp.header.type = messageTypes::ServerRespondLogin;
+                    std::string payload = "-1";
+                    resp << payload;
+                    client->send(resp);
+                }
+
+
+                break;
+            }
         }
     }
 

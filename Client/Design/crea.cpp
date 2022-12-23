@@ -70,10 +70,40 @@ void TCrea_c::Validation(wxCommandEvent &event) {
     bool bOK = true;
     if (txt_mail->IsEmpty()) bOK = false;
     if (txt_mdp->IsEmpty()) bOK = false;
+    if (txt_pren->IsEmpty()) bOK = false;
+    if (txt_nom->IsEmpty()) bOK = false;
+    if (txt_adresse->IsEmpty()) bOK = false;
+    if (txt_tel->IsEmpty()) bOK = false;
     if (bOK) {
-        Close();
-        TAcc *accueil = new TAcc("Choix compte",wxPoint(150, 150), wxSize(480, 360));
-        accueil->Show(true);
+        std::string request = "SELECT * FROM client WHERE mail='" + (std::string)txt_mail->GetValue() + "'";
+        std::vector<std::map<std::string, std::string>> result = wxGetApp().database.select(request);
+        if (!result.empty())
+        {
+            wxMessageBox(_T("Cette adresse mail est deja utilisee"),wxT("BIM"), wxICON_ERROR);
+        }
+        else
+        {
+            std::string request2 = "INSERT INTO client (nom, prenom, adresse, numero_tel, mail, mot_de_passe) VALUES ('" + (std::string)txt_nom->GetValue() + "', '" + (std::string)txt_pren->GetValue() + "', '" + (std::string)txt_adresse->GetValue() + "', '" + (std::string)txt_tel->GetValue() + "','" + (std::string)txt_mail->GetValue() + "', '" + (std::string)txt_mdp->GetValue() + "')";
+            int insertOK = wxGetApp().database.insert(request2);
+
+            if(insertOK == 0)
+            {
+                std::string request3 = "SELECT * FROM client WHERE mail='" + (std::string)txt_mail->GetValue() + "'";
+                std::vector<std::map<std::string, std::string>> result3 = wxGetApp().database.select(request);
+                if (!result3.empty())
+                {
+                    wxGetApp().user = helpers::Client(stoi(result3[0]["id"]), (std::string)txt_nom->GetValue(), (std::string)txt_pren->GetValue(), (std::string)txt_adresse->GetValue(), (std::string)txt_tel->GetValue(), (std::string)txt_mail->GetValue());
+                    Close();
+                    TAcc *accueil = new TAcc("Choix compte",wxPoint(150, 150), wxSize(480, 360));
+                    accueil->Show(true);
+                }
+            }
+            else
+            {
+                wxMessageBox("Erreur", wxT("BIM"), wxICON_ERROR);
+            }
+        }
+        //wxMessageBox(txt_mail->GetValue() << _T(" ") << txt_mdp->GetValue(), _T("test"));
     }
     else
         int reponse = wxMessageBox(_T("Veuillez remplir les informations"),wxT("BIM"), wxICON_ERROR);

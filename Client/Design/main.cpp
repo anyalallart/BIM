@@ -61,6 +61,7 @@ void TMyFrame::OnClick_1(wxCommandEvent& WXUNUSED(event)){
                     case messageTypes::ServerRespondAskConnection:
                         if (stoi(std::string(msg.body.begin(), msg.body.end() - 1)) == 1)
                         {
+                            wxGetApp().database = *new DB("../database_client_1.db");
                             Close();
                             TCo *cone = new TCo("Banque Isen Mondiale",wxPoint(150, 150), wxSize(480, 360));
                             cone->Show(true);
@@ -99,6 +100,7 @@ void TMyFrame::OnClick_2(wxCommandEvent &event) {
                     case messageTypes::ServerRespondAskConnection:
                         if (stoi(std::string(msg.body.begin(), msg.body.end() - 1)) == 1)
                         {
+                            wxGetApp().database = *new DB("../database_client_2.db");
                             Close();
                             TCo *cone = new TCo("Banque Isen Mondiale",wxPoint(150, 150), wxSize(480, 360));
                             cone->Show(true);
@@ -137,6 +139,7 @@ void TMyFrame::OnClick_3(wxCommandEvent &event) {
                     case messageTypes::ServerRespondAskConnection:
                         if (stoi(std::string(msg.body.begin(), msg.body.end() - 1)) == 1)
                         {
+                            wxGetApp().database = *new DB("../database_client_3.db");
                             Close();
                             TCo *cone = new TCo("Banque Isen Mondiale",wxPoint(150, 150), wxSize(480, 360));
                             cone->Show(true);

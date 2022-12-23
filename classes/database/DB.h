@@ -28,18 +28,16 @@ private:
 
         return 0;
     }
-
 public:
+    DB()
+    {
+
+    }
+
     DB(std::string database)
     {
         zErrMsg = 0;
         rc = sqlite3_open(database.c_str(), &db);
-
-        if( rc ) {
-            fprintf(stderr, "Can't open database: %s\n", sqlite3_errmsg(db));
-        } else {
-            fprintf(stderr, "Opened database successfully\n");
-        }
     }
 
     ~DB()
@@ -55,12 +53,16 @@ public:
         rc = sqlite3_exec(db, request.c_str(), callbackSelect, &result, &zErrMsg);
 
         if( rc != SQLITE_OK ) {
-            fprintf(stderr, "SQL error: %s\n", zErrMsg);
             sqlite3_free(zErrMsg);
             return {};
         } else {
             return result;
         }
+    }
+
+    int insert(std::string request)
+    {
+        return sqlite3_exec(db, request.c_str(), NULL, 0, &zErrMsg);
     }
 };
 
