@@ -8,7 +8,7 @@ public:
     void OkButton(wxCommandEvent& evt);
     void Button(wxCommandEvent& evt);
 private:
-    wxTextCtrl *Iban, *Nom;
+    wxTextCtrl *Iban, *Nom, *Somme;
 };
 
 enum{

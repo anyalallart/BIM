@@ -10,29 +10,35 @@ TVir::TVir(const wxString& title) : wxDialog(NULL, -1, title, wxDefaultPosition,
 
     wxStaticBox *st = new wxStaticBox(panel, -1, wxT("Vos comptes"),
                                       wxPoint(105, 15), wxSize(260, 150));
-    for (int i = 0; i < 3; i++){
-        auto* button = new wxRadioButton(panel,FIRST_ID+i,wxT("nom compte"));
+
+    std::string request ="SELECT * FROM compte WHERE client='"+ std::to_string(wxGetApp().user.id)+"'";
+    std::vector<std::map<std::string, std::string>> result = wxGetApp().database.select(request);
+
+    std::string request2 ="SELECT * FROM type_compte";
+    std::vector<std::map<std::string, std::string>> type = wxGetApp().database.select(request2);
+
+    for (int i = 0; i < result.size(); i++){
+        auto* button = new wxRadioButton(panel,FIRST_ID+i,_T("Compte numero " + result[i]["id"] + ", " + type[stoi(result[i]["type"]) - 1]["nom"]));
         button->SetPosition(wxPoint(120,50+i*25));
     }
-
-    wxRadioButton *rb3 = new wxRadioButton(panel, -1,
-                                           wxT("Autres"), wxPoint(120, 125));
-
-    wxTextCtrl *tc = new wxTextCtrl(panel, -1, wxT(""),
-                                    wxPoint(185, 125));
 
     wxStaticBox *sv = new wxStaticBox(panel, -1, wxT("Choix du compte a crediter"),
                                       wxPoint(105, 200), wxSize(260, 150));
 
-    auto *txt1 = new wxStaticText(this, -1, _T("Nom :"), wxPoint(120,240));
+    auto *txt1 = new wxStaticText(this, -1, _T("Iban :"), wxPoint(120,240));
 
     Nom = new wxTextCtrl(panel, -1, wxT(""),
-                                    wxPoint(155, 240));
+                                    wxPoint(175, 240));
 
-    auto *txt2 = new wxStaticText(this, -1, _T("Iban :"), wxPoint(120,290));
+    auto *txt2 = new wxStaticText(this, -1, _T("Libelle :"), wxPoint(120,280));
 
     Iban = new wxTextCtrl(panel, -1, wxT(""),
-                                    wxPoint(155, 290));
+                                    wxPoint(175, 280));
+
+    auto *txt3 = new wxStaticText(this, -1, _T("Somme :"), wxPoint(120,320));
+
+    Somme = new wxTextCtrl(panel, -1, wxT(""),
+                          wxPoint(175, 320));
 
     wxButton *okButton = new wxButton(this, -1, wxT("Ok"),
                                       wxDefaultPosition, wxSize(100, 30));
