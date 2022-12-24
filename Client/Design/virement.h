@@ -6,6 +6,7 @@ class TVir : public wxDialog
 public:
     TVir(const wxString& title);
     void OkButton(wxCommandEvent& evt);
+    void Button(wxCommandEvent& evt);
 private:
     wxTextCtrl *Iban, *Nom;
 };

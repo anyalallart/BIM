@@ -31,10 +31,7 @@ TAcc::TAcc(const wxString& title, const wxPoint& pos, const wxSize& size,
                 wxCommandEventHandler(TAcc::OnButtonClick),
                 nullptr,
                 this);
-        button->SetPosition(wxPoint(100,50*(i+1)));
-
-        //auto *vir = new wxStaticText(this, -1, _T("Virements"), wxPoint(300,20));
-
+        button->SetPosition(wxPoint(80,50*(i+1)));
     }
     Virement = new wxButton(this,BUTTON_VIREMENT,"Virement", wxPoint(300,80),
                             wxSize (100, 40));
@@ -43,7 +40,6 @@ TAcc::TAcc(const wxString& title, const wxPoint& pos, const wxSize& size,
 void TAcc::OnButtonClick(wxCommandEvent& evt) {
     std::string request ="SELECT * FROM compte WHERE id='" + std::to_string(evt.GetId() - FIRST_BUTTON_ID + 1) + "'";
     std::vector<std::map<std::string, std::string>> result = wxGetApp().database.select(request);
-
 
     wxGetApp().compte = *new helpers::Compte(stoi(result[0]["id"]), wxGetApp().user.id, stoi(result[0]["type"]), stoi(result[0]["solde"]));
 

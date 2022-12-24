@@ -14,14 +14,6 @@ TVir::TVir(const wxString& title) : wxDialog(NULL, -1, title, wxDefaultPosition,
         auto* button = new wxRadioButton(panel,FIRST_ID+i,wxT("nom compte"));
         button->SetPosition(wxPoint(120,50+i*25));
     }
-    /*
-    wxRadioButton *rb = new wxRadioButton(panel, -1,
-                                          wxT("compte 1"), wxPoint(80, 50), wxDefaultSize, wxRB_GROUP);
-    wxRadioButton *rb1 = new wxRadioButton(panel, -1,
-                                           wxT("compte 2"), wxPoint(80, 75));
-    wxRadioButton *rb2 = new wxRadioButton(panel, -1,
-                                           wxT("compte 3"), wxPoint(80, 100));
-    */
 
     wxRadioButton *rb3 = new wxRadioButton(panel, -1,
                                            wxT("Autres"), wxPoint(120, 125));
@@ -43,9 +35,13 @@ TVir::TVir(const wxString& title) : wxDialog(NULL, -1, title, wxDefaultPosition,
                                     wxPoint(155, 290));
 
     wxButton *okButton = new wxButton(this, -1, wxT("Ok"),
-                                      wxDefaultPosition, wxSize(120, 30));
+                                      wxDefaultPosition, wxSize(100, 30));
+
+    wxButton *retourButton = new wxButton(this, -1, wxT("Retour"),
+                                          wxDefaultPosition, wxSize(160, 30));
 
     hbox->Add(okButton, 1);
+    hbox->Add(retourButton, 1);
 
     vbox->Add(panel, 1);
     vbox->Add(hbox, 0, wxALIGN_CENTER | wxTOP | wxBOTTOM, 10);
@@ -53,6 +49,7 @@ TVir::TVir(const wxString& title) : wxDialog(NULL, -1, title, wxDefaultPosition,
     SetSizer(vbox);
 
     okButton->Bind(wxEVT_COMMAND_BUTTON_CLICKED, &TVir::OkButton, this);
+    retourButton->Bind(wxEVT_COMMAND_BUTTON_CLICKED, &TVir::Button, this);
 
     Centre();
     ShowModal();
@@ -70,4 +67,11 @@ void TVir::OkButton(wxCommandEvent &evt) {
     else{
         wxMessageBox( wxT("Veuillez remplir les informations"), wxT("BIM"), wxICON_ERROR);
     }
+}
+
+void TVir::Button(wxCommandEvent &evt) {
+    Close();
+    TAcc *accueil = new TAcc("Vos comptes",
+                             wxPoint(150, 150), wxSize(480, 360));
+    accueil->Show(true);
 }
