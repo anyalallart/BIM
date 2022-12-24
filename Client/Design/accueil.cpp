@@ -1,4 +1,7 @@
 #include "include.h"
+#include <algorithm>
+
+#include "../../classes/helpers/Client.h"
 
 BEGIN_EVENT_TABLE(TAcc, wxFrame)
                 EVT_BUTTON(BUTTON_VIREMENT,  TAcc::Vir)
@@ -38,11 +41,15 @@ TAcc::TAcc(const wxString& title, const wxPoint& pos, const wxSize& size,
 }
 
 void TAcc::OnButtonClick(wxCommandEvent& evt) {
+    std::string request ="SELECT * FROM compte WHERE id='" + std::to_string(evt.GetId() - FIRST_BUTTON_ID + 1) + "'";
+    std::vector<std::map<std::string, std::string>> result = wxGetApp().database.select(request);
+
+
+    wxGetApp().compte = *new helpers::Compte(stoi(result[0]["id"]), wxGetApp().user.id, stoi(result[0]["type"]), stoi(result[0]["solde"]));
+
     Close();
     TInf *info = new TInf("Informations compte");
     info->Show(true);
-
-
 }
 
 void TAcc::Vir(wxCommandEvent &evt) {
@@ -50,4 +57,3 @@ void TAcc::Vir(wxCommandEvent &evt) {
     TVir *vir = new TVir("Virement");
     vir->Show(true);
 }
-

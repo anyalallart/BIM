@@ -12,6 +12,7 @@ public:
     Client client;
     DB database;
     helpers::Client user;
+    helpers::Compte compte;
     virtual bool OnInit();
 };
 

@@ -25,6 +25,28 @@ namespace helpers
                 id(id), nom(nom), prenom(prenom),adresse(adresse), numero_tel(numero_tel), mail(mail) {}
 
     };
+
+    class Type {
+    public:
+        int id;
+        std::string nom;
+        int interet;
+
+        Type() {};
+        Type(int id, std::string nom, int interet): id(id), nom(nom), interet(interet) {}
+    };
+
+    class Compte {
+    public:
+        int id;
+        int client;
+        int type;
+        int solde;
+
+        Compte() {}
+        Compte(int id, int client, int type, int solde): id(id), client(client), type(type), solde(solde) {
+        }
+    };
 }
 
 #endif //BIM_SERVEUR_CLIENT_H
