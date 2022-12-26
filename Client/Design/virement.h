@@ -8,7 +8,8 @@ public:
     void OkButton(wxCommandEvent& evt);
     void Button(wxCommandEvent& evt);
 private:
-    wxTextCtrl *Iban, *Nom, *Somme;
+    wxTextCtrl *txt_iban, *txt_libelle, *txt_somme;
+    std::vector<wxRadioButton*> buttons;
 };
 
 enum{

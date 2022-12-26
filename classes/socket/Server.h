@@ -231,7 +231,31 @@ protected:
                     resp << payload;
                     client->send(resp);
                 }
+                break;
+            }
 
+            case messageTypes::ClientAskAccount: {
+                std::string accountID = std::string(msg.body.begin(), msg.body.end() - 1);
+
+                std::string request ="SELECT * FROM compte WHERE id='" + accountID + "'";
+                std::vector<std::map<std::string, std::string>> result = database.select(request);
+
+                if(!result.empty())
+                {
+                    Message resp;
+                    resp.header.type = messageTypes::ServerRespondAccount;
+                    std::string payload = result[0]["ref_banque"];
+                    resp << payload;
+                    client->send(resp);
+                }
+                else
+                {
+                    Message resp;
+                    resp.header.type = messageTypes::ServerRespondAccount;
+                    std::string payload = "-1";
+                    resp << payload;
+                    client->send(resp);
+                }
 
                 break;
             }

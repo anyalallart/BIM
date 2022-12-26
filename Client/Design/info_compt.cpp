@@ -34,8 +34,14 @@ TInf::TInf(const wxString& title) : wxDialog(NULL, -1, title, wxDefaultPosition,
     wxStaticBox *sb = new wxStaticBox(panel, -1, wxT("Vos transactions"),
                                       wxPoint(310, 15), wxSize(160, 335));
 
-    for (int i = 0; i < 5; i++) {
-        auto* txt = new wxStaticText(this, FIRST_BUTTON_ID+i,"+1222 : oui");
+    std::string request3 ="SELECT * FROM `transaction` WHERE `num_receveur`='" + std::to_string(compte.id) + "' OR `num_emetteur`='" + std::to_string(compte.id) + "' LIMIT 11";
+
+    std::vector<std::map<std::string, std::string>> result3 = wxGetApp().database.select(request3);
+
+    for (int i = 0; i < result3.size(); i++) {
+        std::string sign = stoi(result3[i]["num_receveur"]) == compte.id ? "+" : "-";
+        std::string print = sign + " " + result3[i]["somme"] + " : " + result3[i]["libelle"];
+        auto* txt = new wxStaticText(this, FIRST_BUTTON_ID+i, print);
         txt->SetPosition(wxPoint(330,50+(i*25)));
     }
 

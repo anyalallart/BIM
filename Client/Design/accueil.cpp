@@ -22,8 +22,7 @@ TAcc::TAcc(const wxString& title, const wxPoint& pos, const wxSize& size,
     std::string request2 ="SELECT * FROM type_compte";
     std::vector<std::map<std::string, std::string>> result2 = wxGetApp().database.select(request2);
 
-
-    for (int i = 0; i < result.size(); i++) {
+    /*for (int i = 0; i < result.size(); i++) {
         auto* button = new wxButton(this, FIRST_BUTTON_ID+i,result2[stoi(result[i]["type"])-1]["nom"]);
         button->Connect(
                 FIRST_BUTTON_ID+i,
@@ -32,7 +31,7 @@ TAcc::TAcc(const wxString& title, const wxPoint& pos, const wxSize& size,
                 nullptr,
                 this);
         button->SetPosition(wxPoint(80,50*(i+1)));
-    }
+    }*/
     Virement = new wxButton(this,BUTTON_VIREMENT,"Virement", wxPoint(300,80),
                             wxSize (100, 40));
 }
@@ -41,7 +40,7 @@ void TAcc::OnButtonClick(wxCommandEvent& evt) {
     std::string request ="SELECT * FROM compte WHERE id='" + std::to_string(evt.GetId() - FIRST_BUTTON_ID + 1) + "'";
     std::vector<std::map<std::string, std::string>> result = wxGetApp().database.select(request);
 
-    wxGetApp().compte = *new helpers::Compte(stoi(result[0]["id"]), wxGetApp().user.id, stoi(result[0]["type"]), stoi(result[0]["solde"]));
+    wxGetApp().compte = helpers::Compte(stoi(result[0]["id"]), wxGetApp().user.id, stoi(result[0]["type"]), stoi(result[0]["solde"]));
 
     Close();
     TInf *info = new TInf("Informations compte");

@@ -20,7 +20,10 @@ enum class messageTypes: uint32_t
     ServerRespondAskConnection,
 
     ClientAskLogin,
-    ServerRespondLogin
+    ServerRespondLogin,
+
+    ClientAskAccount,
+    ServerRespondAccount
 };
 
 struct header {
