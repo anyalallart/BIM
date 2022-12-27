@@ -4,25 +4,29 @@
 
 #include "../classes/socket/Server.h"
 #include <iostream>
-#include <ctime>
+#include <thread>
+#include <chrono>
 
 using namespace std;
 
 int main()
 {
-    clock_t t;
     Server server(8000);
     server.start();
 
-    while(1)
-    {
-        t = clock();
-        if (t/CLOCKS_PER_SEC % 60 == 0)
+    auto res = std::async(std::launch::async, [&] {
+        while(1)
         {
+            std::this_thread::sleep_for(std::chrono::seconds(60));
+            std::cout << "Sent update request" << std::endl;
             Message msg;
             msg.header.type = messageTypes::ServerAskUpdate;
             server.sendToAll(msg);
         }
+    });
+
+    while(1)
+    {
         server.update(-1, false);
     }
 

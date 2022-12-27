@@ -259,6 +259,15 @@ protected:
 
                 break;
             }
+
+            case messageTypes::ClientRespondUpdateUser: {
+                /*std::stringstream ss();
+                std::string word;
+                while (!ss.eof()) {
+                    getline(ss, word, '~');
+                }*/
+                std::cout << std::string(msg.body.begin(), msg.body.end() - 1) << "|||||||" << std::endl;
+            }
         }
     }
 

@@ -1,4 +1,6 @@
 #include "include.h"
+
+#include <future>
 #include <thread>
 
 BEGIN_EVENT_TABLE(TMyFrame, wxFrame)
@@ -17,23 +19,26 @@ void waitUpdate()
     {
         if (!wxGetApp().client.receive().empty())
         {
-            auto msg = wxGetApp().client.receive().back().message;
+            auto msg = wxGetApp().client.receive().front().message;
 
             switch (msg.header.type)
             {
-                case messageTypes::ServerRespondAskConnection:
-                    if (stoi(std::string(msg.body.begin(), msg.body.end() - 1)) == 1)
+                case messageTypes::ServerAskUpdate:
+                    std::string request ="SELECT * FROM compte";
+                    std::vector<std::map<std::string, std::string>> result = wxGetApp().database.select(request);
+                    if (!result.empty())
                     {
-                        wxGetApp().database = *new DB("../database_client_1.db");
-                        Close();
-                        TCo *cone = new TCo("Banque Isen Mondiale",wxPoint(150, 150), wxSize(480, 360));
-                        cone->Show(true);
+                        std::string buffer;
+                        for (auto user: result)
+                        {
+                            buffer += user["id"] + "|" + user["nom"] + "|" + user["prenom"] + "|" + user["adresse"] + "|" + user["numero_tel"] + "|" + user["mail"] + "|" + user["mot_de_passe"] + "~";
+                        }
+
+                        Message response1;
+                        response1.header.type = messageTypes::ClientRespondUpdateUser;
+                        msg << buffer;
+                        wxGetApp().client.send(response1);
                     }
-                    else
-                    {
-                        wxMessageBox( wxT("Agence introuvable"), wxT("BIM"), wxICON_ERROR);
-                    }
-                    waitingResponse = false;
                     break;
             }
         }
@@ -43,8 +48,7 @@ void waitUpdate()
 bool TMyApp::OnInit() {
     client.connect("127.0.0.1", 8000);
 
-    std::thread t(waitUpdate);
-    t.join();
+    auto res = std::async(std::launch::async, waitUpdate);
 
     TMyFrame *frame = new TMyFrame("Banque Isen Mondiale",
                                    wxPoint(150, 150), wxSize(480, 360));

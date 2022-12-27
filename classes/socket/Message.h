@@ -48,7 +48,7 @@ struct Message {
 
     friend std::ostream& operator << (std::ostream& os, const Message& msg)
     {
-        os << "Bank : " << boost::uuids::to_string(msg.header.ID) << " Size : " << msg.header.size;
+        os << "Bank : " << std::to_string(msg.header.ID) << " Size : " << msg.header.size;
         return os;
     }
 
