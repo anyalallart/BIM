@@ -23,11 +23,16 @@ enum class messageTypes: uint32_t
     ServerRespondLogin,
 
     ClientAskAccount,
-    ServerRespondAccount
+    ServerRespondAccount,
+
+    ServerAskUpdate,
+    ClientRespondUpdateUser,
+    ClientRespondUpdateAccount,
+    ClientRespondTransaction
 };
 
 struct header {
-    boost::uuids::uuid ID;
+    int ID;
     messageTypes type;
     uint32_t size = 0;
 };

@@ -1,4 +1,5 @@
 #include "include.h"
+#include <thread>
 
 BEGIN_EVENT_TABLE(TMyFrame, wxFrame)
                 EVT_BUTTON(BUTTON_AG1,  TMyFrame::OnClick_1)
@@ -10,8 +11,40 @@ IMPLEMENT_APP(TMyApp)
 
 //------------------------------------------------------------------------------
 
+void waitUpdate()
+{
+    while (true)
+    {
+        if (!wxGetApp().client.receive().empty())
+        {
+            auto msg = wxGetApp().client.receive().back().message;
+
+            switch (msg.header.type)
+            {
+                case messageTypes::ServerRespondAskConnection:
+                    if (stoi(std::string(msg.body.begin(), msg.body.end() - 1)) == 1)
+                    {
+                        wxGetApp().database = *new DB("../database_client_1.db");
+                        Close();
+                        TCo *cone = new TCo("Banque Isen Mondiale",wxPoint(150, 150), wxSize(480, 360));
+                        cone->Show(true);
+                    }
+                    else
+                    {
+                        wxMessageBox( wxT("Agence introuvable"), wxT("BIM"), wxICON_ERROR);
+                    }
+                    waitingResponse = false;
+                    break;
+            }
+        }
+    }
+}
+
 bool TMyApp::OnInit() {
     client.connect("127.0.0.1", 8000);
+
+    std::thread t(waitUpdate);
+    t.join();
 
     TMyFrame *frame = new TMyFrame("Banque Isen Mondiale",
                                    wxPoint(150, 150), wxSize(480, 360));

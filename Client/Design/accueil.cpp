@@ -22,7 +22,7 @@ TAcc::TAcc(const wxString& title, const wxPoint& pos, const wxSize& size,
     std::string request2 ="SELECT * FROM type_compte";
     std::vector<std::map<std::string, std::string>> result2 = wxGetApp().database.select(request2);
 
-    /*for (int i = 0; i < result.size(); i++) {
+    for (int i = 0; i < result.size(); i++) {
         auto* button = new wxButton(this, FIRST_BUTTON_ID+i,result2[stoi(result[i]["type"])-1]["nom"]);
         button->Connect(
                 FIRST_BUTTON_ID+i,
@@ -31,7 +31,7 @@ TAcc::TAcc(const wxString& title, const wxPoint& pos, const wxSize& size,
                 nullptr,
                 this);
         button->SetPosition(wxPoint(80,50*(i+1)));
-    }*/
+    }
     Virement = new wxButton(this,BUTTON_VIREMENT,"Virement", wxPoint(300,80),
                             wxSize (100, 40));
 }
