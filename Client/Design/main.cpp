@@ -1,8 +1,5 @@
 #include "include.h"
 
-#include <future>
-#include <thread>
-
 BEGIN_EVENT_TABLE(TMyFrame, wxFrame)
                 EVT_BUTTON(BUTTON_AG1,  TMyFrame::OnClick_1)
                 EVT_BUTTON(BUTTON_AG2,  TMyFrame::OnClick_2)
@@ -13,47 +10,54 @@ IMPLEMENT_APP(TMyApp)
 
 //------------------------------------------------------------------------------
 
-void waitUpdate()
-{
-    while (true)
-    {
-        if (!wxGetApp().client.receive().empty())
-        {
-            auto msg = wxGetApp().client.receive().front().message;
-
-            switch (msg.header.type)
-            {
-                case messageTypes::ServerAskUpdate:
-                    std::string request ="SELECT * FROM compte";
-                    std::vector<std::map<std::string, std::string>> result = wxGetApp().database.select(request);
-                    if (!result.empty())
-                    {
-                        std::string buffer;
-                        for (auto user: result)
-                        {
-                            buffer += user["id"] + "|" + user["nom"] + "|" + user["prenom"] + "|" + user["adresse"] + "|" + user["numero_tel"] + "|" + user["mail"] + "|" + user["mot_de_passe"] + "~";
-                        }
-
-                        Message response1;
-                        response1.header.type = messageTypes::ClientRespondUpdateUser;
-                        msg << buffer;
-                        wxGetApp().client.send(response1);
-                    }
-                    break;
-            }
-        }
-    }
-}
-
 bool TMyApp::OnInit() {
     client.connect("127.0.0.1", 8000);
 
-    auto res = std::async(std::launch::async, waitUpdate);
+    t = std::thread([&] {
+        while (true)
+        {
+            std::this_thread::sleep_for(std::chrono::seconds(20));
+            if (!wxGetApp().client.receive().empty())
+            {
+                auto msg = wxGetApp().client.receive().front().message;
+
+                switch (msg.header.type)
+                {
+                    case messageTypes::ServerAskUpdate:
+                        std::string request ="SELECT * FROM compte";
+                        std::vector<std::map<std::string, std::string>> result = wxGetApp().database.select(request);
+                        if (!result.empty())
+                        {
+                            std::string buffer;
+                            for (auto user: result)
+                            {
+                                buffer += user["id"] + "|" + user["nom"] + "|" + user["prenom"] + "|" + user["adresse"] + "|" + user["numero_tel"] + "|" + user["mail"] + "|" + user["mot_de_passe"] + "~";
+                            }
+
+                            Message response1;
+                            response1.header.type = messageTypes::ClientRespondUpdateUser;
+                            msg << buffer;
+                            wxGetApp().client.send(response1);
+                        }
+                        break;
+                }
+            }
+        }
+    });
 
     TMyFrame *frame = new TMyFrame("Banque Isen Mondiale",
                                    wxPoint(150, 150), wxSize(480, 360));
     frame->Show(true);
     return (true);
+}
+
+int TMyApp::OnExit()
+{
+    if (t.joinable()) {
+        t.join();
+    }
+
+    return 0;
 }
 
 //------------------------------------------------------------------------------

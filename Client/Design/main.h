@@ -4,7 +4,8 @@
 #include "../../classes/database/DB.h"
 #include "../../classes/socket/Client.h"
 #include "../../classes/socket/Message.h"
-
+#include <chrono>
+#include <thread>
 //------------------------------------------------------------------------------
 class TMyApp : public wxApp
 {
@@ -13,7 +14,9 @@ public:
     DB database;
     helpers::Client user;
     helpers::Compte compte;
+    std::thread t;
     virtual bool OnInit();
+    virtual int OnExit();
 };
 
 DECLARE_APP(TMyApp)
