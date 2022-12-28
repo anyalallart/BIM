@@ -90,7 +90,7 @@ void TCo::Validation(wxCommandEvent &event) {
                             {
                                 int newDB = stoi(std::string(msg.body.begin(), msg.body.end() - 1));
                                 wxGetApp().database = *new DB("../database_client_" + std::to_string(newDB) + ".db");
-
+                                wxGetApp().agence_id = newDB;
                                 std::string request2 = "SELECT * FROM client WHERE mail='" + (std::string)txt_mail->GetValue() + "' AND mot_de_passe='" + (std::string)txt_mdp->GetValue() + "'";
                                 std::vector<std::map<std::string, std::string>> result2 = wxGetApp().database.select(request);
                                 if (!result2.empty()) {
@@ -107,8 +107,6 @@ void TCo::Validation(wxCommandEvent &event) {
             }
 
         }
-        //wxMessageBox( txt_mail->GetValue() << _T(" ") << txt_mdp->GetValue(),_T("test"));
-
     }
     else
         wxMessageBox(_T("Veuillez remplir les informations"),wxT("BIM"), wxICON_ERROR);

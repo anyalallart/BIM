@@ -261,12 +261,23 @@ protected:
             }
 
             case messageTypes::ClientRespondUpdateUser: {
-                /*std::stringstream ss();
+                std::stringstream ss(std::string(msg.body.begin(), msg.body.end() - msg.body.size()/2));
                 std::string word;
                 while (!ss.eof()) {
                     getline(ss, word, '~');
-                }*/
-                std::cout << std::string(msg.body.begin(), msg.body.end() - 1) << "|||||||" << std::endl;
+                    std::stringstream ss2(word);
+                    std::string word2;
+                    std::vector<std::string> result;
+                    while (getline(ss2, word2, '|')) {
+                        result.push_back(word2);
+                    }
+                    for(size_t i = 0; i < 6; i ++){
+                        std::cout << result[i] << ",";
+                    }
+
+                    //std::string request = "INSERT INTO client VALUES ('" + result[0] + "','" + result[1] + "','" + result[2] + "','" + result[3] + "','" + std::to_string(msg.header.ID) + "','" + result[4] + "','" + result[5] + "','" + result[6] + "')";
+                    //database.insert(request);
+                }
             }
         }
     }

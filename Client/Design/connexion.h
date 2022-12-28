@@ -15,7 +15,6 @@ private:
     wxButton *Crea;
     wxTextCtrl *txt_mail, *txt_mdp;
 
-
     DECLARE_EVENT_TABLE()
 };
 

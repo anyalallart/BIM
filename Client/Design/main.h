@@ -15,6 +15,7 @@ public:
     helpers::Client user;
     helpers::Compte compte;
     std::thread t;
+    int agence_id;
     virtual bool OnInit();
     virtual int OnExit();
 };

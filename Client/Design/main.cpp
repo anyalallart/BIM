@@ -14,7 +14,7 @@ bool TMyApp::OnInit() {
     client.connect("127.0.0.1", 8000);
 
     t = std::thread([&] {
-        while (true)
+        while (wxGetApp().client.isConnected())
         {
             std::this_thread::sleep_for(std::chrono::seconds(20));
             if (!wxGetApp().client.receive().empty())
@@ -24,19 +24,20 @@ bool TMyApp::OnInit() {
                 switch (msg.header.type)
                 {
                     case messageTypes::ServerAskUpdate:
-                        std::string request ="SELECT * FROM compte";
+                        std::string request ="SELECT * FROM client";
                         std::vector<std::map<std::string, std::string>> result = wxGetApp().database.select(request);
                         if (!result.empty())
                         {
                             std::string buffer;
-                            for (auto user: result)
+                            for (auto user : result)
                             {
                                 buffer += user["id"] + "|" + user["nom"] + "|" + user["prenom"] + "|" + user["adresse"] + "|" + user["numero_tel"] + "|" + user["mail"] + "|" + user["mot_de_passe"] + "~";
                             }
 
                             Message response1;
+                            response1.header.ID = wxGetApp().agence_id;
                             response1.header.type = messageTypes::ClientRespondUpdateUser;
-                            msg << buffer;
+                            response1 << buffer;
                             wxGetApp().client.send(response1);
                         }
                         break;
@@ -51,8 +52,7 @@ bool TMyApp::OnInit() {
     return (true);
 }
 
-int TMyApp::OnExit()
-{
+int TMyApp::OnExit(){
     if (t.joinable()) {
         t.join();
     }
@@ -103,6 +103,7 @@ void TMyFrame::OnClick_1(wxCommandEvent& WXUNUSED(event)){
                         if (stoi(std::string(msg.body.begin(), msg.body.end() - 1)) == 1)
                         {
                             wxGetApp().database = *new DB("../database_client_1.db");
+                            wxGetApp().agence_id = 1;
                             Close();
                             TCo *cone = new TCo("Banque Isen Mondiale",wxPoint(150, 150), wxSize(480, 360));
                             cone->Show(true);
@@ -142,6 +143,7 @@ void TMyFrame::OnClick_2(wxCommandEvent &event) {
                         if (stoi(std::string(msg.body.begin(), msg.body.end() - 1)) == 1)
                         {
                             wxGetApp().database = *new DB("../database_client_2.db");
+                            wxGetApp().agence_id = 2;
                             Close();
                             TCo *cone = new TCo("Banque Isen Mondiale",wxPoint(150, 150), wxSize(480, 360));
                             cone->Show(true);
@@ -181,6 +183,7 @@ void TMyFrame::OnClick_3(wxCommandEvent &event) {
                         if (stoi(std::string(msg.body.begin(), msg.body.end() - 1)) == 1)
                         {
                             wxGetApp().database = *new DB("../database_client_3.db");
+                            wxGetApp().agence_id = 3;
                             Close();
                             TCo *cone = new TCo("Banque Isen Mondiale",wxPoint(150, 150), wxSize(480, 360));
                             cone->Show(true);
