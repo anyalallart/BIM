@@ -1,4 +1,6 @@
 #include "include.h"
+#include "../../Serveur/Design/banque.h"
+
 
 BEGIN_EVENT_TABLE(TMyFrame, wxFrame)
                 EVT_BUTTON(BUTTON_AG1,  TMyFrame::OnClick_1)
