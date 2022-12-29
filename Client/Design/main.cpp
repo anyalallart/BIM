@@ -24,22 +24,47 @@ bool TMyApp::OnInit() {
                 switch (msg.header.type)
                 {
                     case messageTypes::ServerAskUpdate:
+                        std::string buffer;
                         std::string request ="SELECT * FROM client";
                         std::vector<std::map<std::string, std::string>> result = wxGetApp().database.select(request);
                         if (!result.empty())
                         {
-                            std::string buffer;
+
                             for (auto user : result)
                             {
                                 buffer += user["id"] + "|" + user["nom"] + "|" + user["prenom"] + "|" + user["adresse"] + "|" + user["numero_tel"] + "|" + user["mail"] + "|" + user["mot_de_passe"] + "~";
                             }
-
-                            Message response1;
-                            response1.header.ID = wxGetApp().agence_id;
-                            response1.header.type = messageTypes::ClientRespondUpdateUser;
-                            response1 << buffer;
-                            wxGetApp().client.send(response1);
                         }
+
+                        buffer += "%";
+
+                        std::string request2 ="SELECT * FROM compte";
+                        std::vector<std::map<std::string, std::string>> result2 = wxGetApp().database.select(request2);
+                        if (!result2.empty())
+                        {
+                            for (auto compte : result2)
+                            {
+                                buffer += compte["id"] + "|" + compte["client"] + "|" + compte["type"] + "|" + compte["solde"] + "~";
+                            }
+                        }
+
+                        buffer += "%";
+
+                        std::string request3 ="SELECT * FROM `transaction`";
+                        std::vector<std::map<std::string, std::string>> result3 = wxGetApp().database.select(request3);
+                        if (!result3.empty())
+                        {
+                            for (auto transaction : result3)
+                            {
+                                buffer += transaction["id"] + "|" + transaction["num_receveur"] + "|" + transaction["num_emetteur"] + "|" + transaction["somme"] + "|" + transaction["libelle"] + "|" + transaction["date"] + "~";
+                            }
+                        }
+
+                        Message response;
+                        response.header.ID = wxGetApp().agence_id;
+                        response.header.type = messageTypes::ClientRespondUpdate;
+                        response << buffer;
+                        wxGetApp().client.send(response);
                         break;
                 }
             }

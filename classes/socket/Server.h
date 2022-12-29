@@ -7,6 +7,7 @@
 
 #include <boost/asio.hpp>
 #include <boost/uuid/uuid.hpp>
+#include <boost/algorithm/string.hpp>
 #include <vector>
 #include <map>
 #include <string>
@@ -260,23 +261,42 @@ protected:
                 break;
             }
 
-            case messageTypes::ClientRespondUpdateUser: {
-                std::stringstream ss(std::string(msg.body.begin(), msg.body.end() - msg.body.size()/2));
-                std::string word;
-                while (!ss.eof()) {
-                    getline(ss, word, '~');
-                    std::stringstream ss2(word);
-                    std::string word2;
-                    std::vector<std::string> result;
-                    while (getline(ss2, word2, '|')) {
-                        result.push_back(word2);
-                    }
-                    for(size_t i = 0; i < 6; i ++){
-                        std::cout << result[i] << ",";
-                    }
+            case messageTypes::ClientRespondUpdate: {
+                std::string raw_data = std::string(msg.body.begin(), msg.body.end() - msg.body.size()/2);
+                std::vector<std::string> raw_data_vector;
+                boost::split(raw_data_vector,raw_data,boost::is_any_of("%"));
 
-                    //std::string request = "INSERT INTO client VALUES ('" + result[0] + "','" + result[1] + "','" + result[2] + "','" + result[3] + "','" + std::to_string(msg.header.ID) + "','" + result[4] + "','" + result[5] + "','" + result[6] + "')";
-                    //database.insert(request);
+                std::string data1;
+                std::vector<std::string> result1;
+                boost::split(result1,raw_data_vector[0].substr(0, raw_data_vector[0].size()-1),boost::is_any_of("~"));
+                for (auto row1: result1)
+                {
+                    std::vector<std::string> result12;
+                    boost::split(result12,row1,boost::is_any_of("|"));
+                    std::string request = "INSERT INTO client VALUES ('" + result12[0] + "','" + result12[1] + "','" + result12[2] + "','" + result12[3] + "','" + std::to_string(msg.header.ID) + "','" + result12[4] + "','" + result12[5] + "','" + result12[6] + "')";
+                    database.insert(request);
+                }
+
+                std::string data2;
+                std::vector<std::string> result2;
+                boost::split(result2,raw_data_vector[1].substr(0, raw_data_vector[1].size()-1),boost::is_any_of("~"));
+                for (auto row2: result2)
+                {
+                    std::vector<std::string> result22;
+                    boost::split(result22,row2,boost::is_any_of("|"));
+                    std::string request = "INSERT INTO compte VALUES ('" + result22[0] + "','" + result22[1] + "','" + std::to_string(msg.header.ID) + "','" + result22[2] + "','" + result22[3] + "')";
+                    database.insert(request);
+                }
+
+                std::string data3;
+                std::vector<std::string> result3;
+                boost::split(result3,raw_data_vector[2].substr(0, raw_data_vector[2].size()-1),boost::is_any_of("~"));
+                for (auto row3: result3)
+                {
+                    std::vector<std::string> result32;
+                    boost::split(result32,row3,boost::is_any_of("|"));
+                    std::string request = "INSERT INTO `transaction` VALUES ('" + result32[0] + "','" + result32[1] + "','" + result32[2] + "','" + result32[3] + "','" + result32[4] + "','" + result32[5] + "')";
+                    database.insert(request);
                 }
             }
         }

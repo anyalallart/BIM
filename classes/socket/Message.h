@@ -26,9 +26,7 @@ enum class messageTypes: uint32_t
     ServerRespondAccount,
 
     ServerAskUpdate,
-    ClientRespondUpdateUser,
-    ClientRespondUpdateAccount,
-    ClientRespondTransaction
+    ClientRespondUpdate
 };
 
 struct header {
