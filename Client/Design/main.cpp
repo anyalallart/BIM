@@ -1,6 +1,4 @@
 #include "include.h"
-#include "../../Serveur/Design/banque.h"
-
 
 BEGIN_EVENT_TABLE(TMyFrame, wxFrame)
                 EVT_BUTTON(BUTTON_AG1,  TMyFrame::OnClick_1)
@@ -18,7 +16,7 @@ bool TMyApp::OnInit() {
     t = std::thread([&] {
         while (wxGetApp().client.isConnected())
         {
-            std::this_thread::sleep_for(std::chrono::seconds(20));
+            std::this_thread::sleep_for(std::chrono::seconds(2));
             if (!wxGetApp().client.receive().empty())
             {
                 auto msg = wxGetApp().client.receive().front().message;

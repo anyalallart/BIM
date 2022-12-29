@@ -159,7 +159,6 @@ public:
 protected:
     bool onClientConnect(std::shared_ptr<Connection> client)
     {
-        std::cout << "Trying to connect to client" << std::endl;
         Message msg;
 
         msg.header.type = messageTypes::ServerAccept;
