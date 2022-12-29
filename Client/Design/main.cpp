@@ -40,11 +40,22 @@ bool TMyApp::OnInit() {
 
                         std::string request2 ="SELECT * FROM compte";
                         std::vector<std::map<std::string, std::string>> result2 = wxGetApp().database.select(request2);
+
+                        std::string request_types = "SELECT * FROM type_compte";
+                        std::vector<std::map<std::string, std::string>> types = wxGetApp().database.select(request_types);
+
                         if (!result2.empty())
                         {
                             for (auto compte : result2)
                             {
-                                buffer += compte["id"] + "|" + compte["client"] + "|" + compte["type"] + "|" + compte["solde"] + "~";
+                                float interet = stof(types[stoi(compte["type"]) - 1]["interet"]);
+
+                                int solde = stoi(compte["solde"]) * (1 + interet/100);
+
+                                std::string updateSolde = "UPDATE compte SET solde='" + std::to_string(solde) + "' WHERE id='" + compte["id"] + "'";
+                                wxGetApp().database.insert(updateSolde);
+
+                                buffer += compte["id"] + "|" + compte["client"] + "|" + compte["type"] + "|" + std::to_string(solde) + "~";
                             }
                         }
 
