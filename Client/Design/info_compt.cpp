@@ -17,13 +17,13 @@ TInf::TInf(const wxString& title) : wxDialog(NULL, -1, title, wxDefaultPosition,
     wxStaticBox *st = new wxStaticBox(panel, -1, wxT("Vos informations"),
                                       wxPoint(30, 15), wxSize(260, 150));
 
-    auto *labelCompte = new wxStaticText(this, -1, _T("Compte numero" + std::to_string(compte.id)), wxPoint(110,50));
+    auto *labelCompte = new wxStaticText(this, -1, _T("Compte numero " + std::to_string(compte.id)), wxPoint(110,50));
 
     auto *labelType = new wxStaticText(this, -1, _T("Votre type de compte :"), wxPoint(50,80));
     // Requete pour le prenom
     auto *labelTypeR = new wxStaticText(this, -1, result2[0]["nom"], wxPoint(180,80));
 
-    wxStaticBox *sv = new wxStaticBox(panel, -1, wxT("Votre moula"),
+    wxStaticBox *sv = new wxStaticBox(panel, -1, wxT("Votre solde :"),
                                       wxPoint(30, 200), wxSize(260, 150));
 
     auto *txt1 = new wxStaticText(this, -1, std::to_string(compte.solde), wxPoint(130,240));

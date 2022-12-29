@@ -27,7 +27,6 @@ int main()
             server.sendToAll(msg);
         }
     });
-    std::cout << "dddddddddddd";
     while(1)
     {
         server.update(-1, false);

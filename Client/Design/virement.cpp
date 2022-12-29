@@ -69,71 +69,103 @@ void TVir::OkButton(wxCommandEvent &evt) {
     if (txt_iban->IsEmpty()) bOK = false;
     if (txt_libelle->IsEmpty()) bOK = false;
     if (txt_somme->IsEmpty()) bOK = false;
-    if (bOK){
+    if (bOK) {
         int accountID = -1;
-        for (auto button: buttons)
-        {
-            if (button->GetValue())
-            {
+        for (auto button: buttons) {
+            if (button->GetValue()) {
                 accountID = button->GetId() - FIRST_ID + 1;
                 break;
             }
         }
 
-        std::string request ="SELECT * FROM compte WHERE id='" + (std::string)txt_iban->GetValue() + "'";
+        std::string request = "SELECT * FROM compte WHERE id='" + (std::string) txt_iban->GetValue() + "'";
         std::vector<std::map<std::string, std::string>> result = wxGetApp().database.select(request);
 
-        if (result.empty())
-        {
-            Message msg;
-            msg.header.type = messageTypes::ClientAskAccount;
-            std::string payload = (std::string)txt_iban->GetValue();
-            msg << payload;
-            wxGetApp().client.send(msg);
+        std::string request2 = "SELECT solde FROM compte WHERE id='" + std::to_string(accountID) + "'";
+        std::vector<std::map<std::string, std::string>> result2 = wxGetApp().database.select(request2);
 
-            bool waitingResponse = true;
+        if (stoi((std::string)txt_somme->GetValue()) > stoi(result2[0]["solde"])) {
+            wxMessageBox(wxT("Vous n'avez pas assez d'argent"), wxT("BIM"), wxICON_ERROR);
+        }
+        else {
+            if (result.empty()) {
+                Message msg;
+                msg.header.type = messageTypes::ClientAskAccount;
+                std::string payload = (std::string) txt_iban->GetValue();
+                msg << payload;
+                wxGetApp().client.send(msg);
 
-            while (waitingResponse) {
-                if (!wxGetApp().client.receive().empty()) {
-                    auto msg = wxGetApp().client.receive().pop().message;
-                    switch (msg.header.type) {
-                        case messageTypes::ServerRespondAccount: {
-                            int bankID = stoi(std::string(msg.body.begin(), msg.body.end() - 1));
+                bool waitingResponse = true;
 
-                            if (bankID != -1)
-                            {
-                                DB database2 = *new DB("../database_client_" + std::to_string(bankID) + ".db");
-                                std::string request2 ="INSERT INTO `transaction` (num_receveur, num_emetteur, somme, libelle, date) VALUES ('" + result[0]["id"] + "', '" + std::to_string(accountID) + "', '" + (std::string)txt_somme->GetValue() + "', '" + (std::string)txt_libelle->GetValue() + "', '12/12/12')";
-                                std::string request3 ="UPDATE compte SET solde=solde-" + (std::string)txt_somme->GetValue() + " WHERE id='" + std::to_string(accountID) + "'";
-                                std::string request4 ="UPDATE compte SET solde=solde+" + (std::string)txt_somme->GetValue() + " WHERE id='" + result[0]["id"] + "'";
+                while (waitingResponse) {
+                    if (!wxGetApp().client.receive().empty()) {
+                        auto msg = wxGetApp().client.receive().pop().message;
+                        switch (msg.header.type) {
+                            case messageTypes::ServerRespondAccount: {
+                                int bankID = stoi(std::string(msg.body.begin(), msg.body.end() - 1));
+                                if (bankID != -1) {
+                                    time_t now = time(0);
+                                    tm *ltm = localtime(&now);
+                                    DB database2 = *new DB("../database_client_" + std::to_string(bankID) + ".db");
+                                    std::string request2 =
+                                            "INSERT INTO `transaction` (num_receveur, num_emetteur, somme, libelle, date) VALUES ('" +
+                                            result[0]["id"] + "', '" + std::to_string(accountID) + "', '" +
+                                            (std::string) txt_somme->GetValue() + "', '" +
+                                            (std::string) txt_libelle->GetValue() + "', '" + std::to_string(1900 + ltm->tm_year) + "/" +
+                                            std::to_string(ltm->tm_mon + 1) + "/" + std::to_string(ltm->tm_mday) + "')" ;
 
-                                wxGetApp().database.insert(request2);
-                                database2.insert(request2);
-                                wxGetApp().database.insert(request3);
-                                database2.insert(request4);
-                            }
-                            else
-                            {
-                                wxMessageBox( wxT("Ce compte n'existe pas"), wxT("BIM"), wxICON_ERROR);
+                                    std::string request3 =
+                                            "UPDATE compte SET solde=solde-" + (std::string) txt_somme->GetValue() +
+                                            " WHERE id='" + std::to_string(accountID) + "'";
+                                    std::string request4 =
+                                            "UPDATE compte SET solde=solde+" + (std::string) txt_somme->GetValue() +
+                                            " WHERE id='" + result[0]["id"] + "'";
+
+                                    wxGetApp().database.insert(request2);
+                                    database2.insert(request2);
+                                    wxGetApp().database.insert(request3);
+                                    database2.insert(request4);
+                                    Close();
+                                    TAcc *accueil = new TAcc("Vos comptes",
+                                                             wxPoint(150, 150), wxSize(480, 360));
+                                    accueil->Show(true);
+                                } else {
+                                    wxMessageBox(wxT("Ce compte n'existe pas"), wxT("BIM"), wxICON_ERROR);
+                                }
                             }
                         }
                     }
                 }
+            } else {
+                time_t now = time(0);
+                tm *ltm = localtime(&now);
+                std::string request2 =
+                        "INSERT INTO `transaction` (num_receveur, num_emetteur, somme, libelle, date) VALUES ('" +
+                        result[0]["id"] + "', '" + std::to_string(accountID) + "', '" +
+                        (std::string) txt_somme->GetValue() + "', '" + (std::string) txt_libelle->GetValue() +
+                        "', '" + std::to_string(1900 + ltm->tm_year) + "/" +
+                        std::to_string(1 + ltm->tm_mon) + "/" + std::to_string(ltm->tm_mday) + "')";
+
+                std::string request3 =
+                        "UPDATE compte SET solde=solde-" + (std::string) txt_somme->GetValue() + " WHERE id='" +
+                        std::to_string(accountID) + "'";
+                std::string request4 =
+                        "UPDATE compte SET solde=solde+" + (std::string) txt_somme->GetValue() + " WHERE id='" +
+                        result[0]["id"] + "'";
+                wxGetApp().database.insert(request2);
+                wxGetApp().database.insert(request3);
+                wxGetApp().database.insert(request4);
+                Close();
+                TAcc *accueil = new TAcc("Vos comptes",
+                                         wxPoint(150, 150), wxSize(480, 360));
+                accueil->Show(true);
             }
-        }
-        else
-        {
-            std::string request2 ="INSERT INTO `transaction` (num_receveur, num_emetteur, somme, libelle, date) VALUES ('" + result[0]["id"] + "', '" + std::to_string(accountID) + "', '" + (std::string)txt_somme->GetValue() + "', '" + (std::string)txt_libelle->GetValue() + "', '12/12/12')";
-            std::string request3 ="UPDATE compte SET solde=solde-" + (std::string)txt_somme->GetValue() + " WHERE id='" + std::to_string(accountID) + "'";
-            std::string request4 ="UPDATE compte SET solde=solde+" + (std::string)txt_somme->GetValue() + " WHERE id='" + result[0]["id"] + "'";
-            wxGetApp().database.insert(request2);
-            wxGetApp().database.insert(request3);
-            wxGetApp().database.insert(request4);
         }
     }
     else{
-        wxMessageBox( wxT("Veuillez remplir les informations"), wxT("BIM"), wxICON_ERROR);
+        wxMessageBox(wxT("Veuillez remplir les informations"), wxT("BIM"), wxICON_ERROR);
     }
+
 }
 
 void TVir::Button(wxCommandEvent &evt) {
