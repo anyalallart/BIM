@@ -29,7 +29,6 @@ bool TMyApp::OnInit() {
                         std::vector<std::map<std::string, std::string>> result = wxGetApp().database.select(request);
                         if (!result.empty())
                         {
-
                             for (auto user : result)
                             {
                                 buffer += user["id"] + "|" + user["nom"] + "|" + user["prenom"] + "|" + user["adresse"] + "|" + user["numero_tel"] + "|" + user["mail"] + "|" + user["mot_de_passe"] + "~";

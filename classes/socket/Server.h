@@ -265,11 +265,11 @@ protected:
                 std::vector<std::string> raw_data_vector;
                 boost::split(raw_data_vector,raw_data,boost::is_any_of("%"));
 
-                std::string data1;
-                std::vector<std::string> result1;
-                boost::split(result1,raw_data_vector[0].substr(0, raw_data_vector[0].size()-1),boost::is_any_of("~"));
+                if(!raw_data_vector[0].empty()) {
+                    std::string data1;
+                    std::vector<std::string> result1;
+                    boost::split(result1,raw_data_vector[0].substr(0, raw_data_vector[0].size()-1),boost::is_any_of("~"));
 
-                if(!result1.empty()) {
                     for (auto row1: result1) {
                         std::vector<std::string> result12;
                         boost::split(result12, row1, boost::is_any_of("|"));
@@ -280,11 +280,12 @@ protected:
                         database.insert(request);
                     }
                 }
-                std::string data2;
-                std::vector<std::string> result2;
-                boost::split(result2,raw_data_vector[1].substr(0, raw_data_vector[1].size()-1),boost::is_any_of("~"));
 
-                if(!result2.empty()) {
+                if(!raw_data_vector[1].empty()) {
+                    std::string data2;
+                    std::vector<std::string> result2;
+                    boost::split(result2,raw_data_vector[1].substr(0, raw_data_vector[1].size()-1),boost::is_any_of("~"));
+
                     for (auto row2: result2) {
                         std::vector<std::string> result22;
                         boost::split(result22, row2, boost::is_any_of("|"));
@@ -294,11 +295,12 @@ protected:
                         database.insert(request);
                     }
                 }
-                std::string data3;
-                std::vector<std::string> result3;
-                boost::split(result3,raw_data_vector[2].substr(0, raw_data_vector[2].size()-1),boost::is_any_of("~"));
 
-                if(!result3.empty()) {
+                if(!raw_data_vector[2].empty()) {
+                    std::string data3;
+                    std::vector<std::string> result3;
+                    boost::split(result3,raw_data_vector[2].substr(0, raw_data_vector[2].size()-1),boost::is_any_of("~"));
+
                     for (auto row3: result3) {
                         std::vector<std::string> result32;
                         boost::split(result32, row3, boost::is_any_of("|"));
