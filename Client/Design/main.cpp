@@ -13,6 +13,31 @@ IMPLEMENT_APP(TMyApp)
 bool TMyApp::OnInit() {
     client.connect("127.0.0.1", 8000);
 
+    t2 = std::thread([&] {
+        while (1)
+        {
+            std::this_thread::sleep_for(std::chrono::seconds(60));
+            std::string request2 ="SELECT * FROM compte";
+            std::vector<std::map<std::string, std::string>> result2 = wxGetApp().database.select(request2);
+
+            std::string request_types = "SELECT * FROM type_compte";
+            std::vector<std::map<std::string, std::string>> types = wxGetApp().database.select(request_types);
+
+            if (!result2.empty())
+            {
+                for (auto compte : result2)
+                {
+                    float interet = stof(types[stoi(compte["type"]) - 1]["interet"]);
+
+                    float solde = stof(compte["solde"]) * (1.f + interet/100.f);
+
+                    std::string updateSolde = "UPDATE compte SET solde='" + std::to_string(solde) + "' WHERE id='" + compte["id"] + "'";
+                    wxGetApp().database.insert(updateSolde);
+                }
+            }
+        }
+    });
+
     t = std::thread([&] {
         while (wxGetApp().client.isConnected())
         {
@@ -40,21 +65,11 @@ bool TMyApp::OnInit() {
                         std::string request2 ="SELECT * FROM compte";
                         std::vector<std::map<std::string, std::string>> result2 = wxGetApp().database.select(request2);
 
-                        std::string request_types = "SELECT * FROM type_compte";
-                        std::vector<std::map<std::string, std::string>> types = wxGetApp().database.select(request_types);
-
                         if (!result2.empty())
                         {
                             for (auto compte : result2)
                             {
-                                float interet = stof(types[stoi(compte["type"]) - 1]["interet"]);
-
-                                int solde = stoi(compte["solde"]) * (1 + interet/100);
-
-                                std::string updateSolde = "UPDATE compte SET solde='" + std::to_string(solde) + "' WHERE id='" + compte["id"] + "'";
-                                wxGetApp().database.insert(updateSolde);
-
-                                buffer += compte["id"] + "|" + compte["client"] + "|" + compte["type"] + "|" + std::to_string(solde) + "~";
+                                buffer += compte["id"] + "|" + compte["client"] + "|" + compte["type"] + "|" + compte["solde"] + "~";
                             }
                         }
 

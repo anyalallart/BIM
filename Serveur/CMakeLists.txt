@@ -33,6 +33,3 @@ set_property(TARGET BIM_Serveur PROPERTY CXX_STANDARD 17)
 
 target_link_libraries(BIM_Serveur PRIVATE ${Boost_LIBRARIES} ${wxWidgets_LIBRARIES} unofficial::sqlite3::sqlite3)
 target_include_directories(BIM_Serveur PRIVATE ${Boost_INCLUDE_DIRS} wx::core wx::base wx::net)
-
-
-

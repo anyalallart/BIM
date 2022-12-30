@@ -40,7 +40,7 @@ void TAcc::OnButtonClick(wxCommandEvent& evt) {
     std::string request ="SELECT * FROM compte WHERE id='" + std::to_string(evt.GetId() - FIRST_BUTTON_ID + 1) + "'";
     std::vector<std::map<std::string, std::string>> result = wxGetApp().database.select(request);
 
-    wxGetApp().compte = helpers::Compte(stoi(result[0]["id"]), wxGetApp().user.id, stoi(result[0]["type"]), stoi(result[0]["solde"]));
+    wxGetApp().compte = helpers::Compte(stoi(result[0]["id"]), wxGetApp().user.id, stoi(result[0]["type"]), stof(result[0]["solde"]));
 
     Close();
     TInf *info = new TInf("Informations compte");

@@ -41,10 +41,10 @@ namespace helpers
         int id;
         int client;
         int type;
-        int solde;
+        float solde;
 
         Compte() {}
-        Compte(int id, int client, int type, int solde): id(id), client(client), type(type), solde(solde) {
+        Compte(int id, int client, int type, float solde): id(id), client(client), type(type), solde(solde) {
         }
     };
 }
