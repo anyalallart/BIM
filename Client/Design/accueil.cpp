@@ -39,15 +39,14 @@ TAcc::TAcc(const wxString& title, const wxPoint& pos, const wxSize& size,
 
 void TAcc::OnButtonClick(wxCommandEvent& evt) {
 
-    //std::string request ="SELECT * FROM compte WHERE id='" + std::to_string(test[evt.GetId() - FIRST_BUTTON_ID]) + "'";
-    //std::vector<std::map<std::string, std::string>> result = wxGetApp().database.select(request);
-    //wxMessageBox(std::to_string(test[evt.GetId() - FIRST_BUTTON_ID]) ,wxT("BIM"), wxICON_ERROR);
-    //wxGetApp().compte = helpers::Compte(stoi(result[0]["id"]), wxGetApp().user.id, stoi(result[0]["type"]), stof(result[0]["solde"]));
-/*
+    std::string request ="SELECT * FROM compte WHERE id='" + std::to_string(test[evt.GetId() - FIRST_BUTTON_ID]) + "'";
+    std::vector<std::map<std::string, std::string>> result = wxGetApp().database.select(request);
+    wxGetApp().compte = helpers::Compte(stoi(result[0]["id"]), wxGetApp().user.id, stoi(result[0]["type"]), stof(result[0]["solde"]));
+
     Close();
     TInf *info = new TInf("Informations compte");
     info->Show(true);
-    */
+
 }
 
 void TAcc::Vir(wxCommandEvent &evt) {

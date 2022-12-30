@@ -112,8 +112,6 @@ void TMyFrame_agc::Recherche(wxCommandEvent &event) {
                 if (!result2.empty())
                 {
                     wxMessageBox("Solde : " + compte["solde"] + " Type de compte : " + result2[0]["nom"] + " Interet : " + result2[0]["interet"] + " % Agence : " + compte["ref_banque"],wxT("BIM"), wxICON_INFORMATION);
-                    wxMessageBox("Oui",wxT("BIM"), wxICON_INFORMATION);
-
                 }
             }
         }
