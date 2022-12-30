@@ -6,6 +6,7 @@
 #include "../../classes/socket/Message.h"
 #include <chrono>
 #include <thread>
+#include <vector>
 //------------------------------------------------------------------------------
 class TMyApp : public wxApp
 {

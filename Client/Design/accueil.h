@@ -9,9 +9,9 @@ public:
              long style = wxDEFAULT_FRAME_STYLE);
     void OnButtonClick(wxCommandEvent& evt);
     void Vir(wxCommandEvent& evt);
-
 private:
     wxButton *Virement;
+    std::vector<int> test;
 
     DECLARE_EVENT_TABLE()
 };

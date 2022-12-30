@@ -28,7 +28,7 @@ TInf::TInf(const wxString& title) : wxDialog(NULL, -1, title, wxDefaultPosition,
 
     auto *txt1 = new wxStaticText(this, -1, std::to_string(compte.solde), wxPoint(130,240));
 
-    auto *interet = new wxStaticText(this, -1, "Vos interets : " + result2[0]["interet"] + "%", wxPoint(100,280));
+   auto *interet = new wxStaticText(this, -1, "Vos interets : " + result2[0]["interet"] + "%", wxPoint(100,280));
 
 
     wxStaticBox *sb = new wxStaticBox(panel, -1, wxT("Vos transactions"),
@@ -38,11 +38,13 @@ TInf::TInf(const wxString& title) : wxDialog(NULL, -1, title, wxDefaultPosition,
 
     std::vector<std::map<std::string, std::string>> result3 = wxGetApp().database.select(request3);
 
-    for (int i = 0; i < result3.size(); i++) {
-        std::string sign = stoi(result3[i]["num_receveur"]) == compte.id ? "+" : "-";
-        std::string print = sign + " " + result3[i]["somme"] + " : " + result3[i]["libelle"];
-        auto* txt = new wxStaticText(this, FIRST_BUTTON_ID+i, print);
-        txt->SetPosition(wxPoint(330,50+(i*25)));
+    if(!result3.empty()) {
+        for (int i = 0; i < result3.size(); i++) {
+            std::string sign = stoi(result3[i]["num_receveur"]) == compte.id ? "+" : "-";
+            std::string print = sign + " " + result3[i]["somme"] + " : " + result3[i]["libelle"];
+            auto *txt = new wxStaticText(this, FIRST_BUTTON_ID + i, print);
+            txt->SetPosition(wxPoint(330, 50 + (i * 25)));
+        }
     }
 
     wxButton *retourButton = new wxButton(this, -1, wxT("Retour"),
@@ -60,6 +62,7 @@ TInf::TInf(const wxString& title) : wxDialog(NULL, -1, title, wxDefaultPosition,
     Centre();
     ShowModal();
     Destroy();
+
 }
 
 void TInf::Button(wxCommandEvent &evt) {
