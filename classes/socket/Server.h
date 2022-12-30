@@ -20,6 +20,8 @@
 #include "tsQueue.h"
 #include "../database/DB.h"
 
+#include "wx/wx.h"
+
 using namespace boost::asio;
 
 // TODO : Make server executable
@@ -205,16 +207,17 @@ protected:
             }
 
             case messageTypes::ClientAskLogin: {
-                std::string message = std::string(msg.body.begin(), msg.body.end() - 5);
+                std::string message = std::string(msg.body.begin(), msg.body.end() - msg.body.size()/2);
 
-                size_t pos = message.find('|');
+                std::vector<std::string> data;
+                boost::split(data,message,boost::is_any_of("|"));
 
-                std::string email = message.substr(0, pos);
-                message.erase(0, pos + 1);
-                std::string password = message;
+                std::string email = data[0];
+                std::string password = data[1];
 
                 std::string request = "SELECT * FROM client WHERE mail='" + email + "' AND mot_de_passe='" + password + "'";
                 std::vector<std::map<std::string, std::string>> result = database.select(request);
+
                 if (!result.empty())
                 {
                     Message resp;

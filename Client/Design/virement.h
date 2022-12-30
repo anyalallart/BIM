@@ -10,6 +10,7 @@ public:
 private:
     wxTextCtrl *txt_iban, *txt_libelle, *txt_somme;
     std::vector<wxRadioButton*> buttons;
+    std::vector<int> buttonsID;
 };
 
 enum{
