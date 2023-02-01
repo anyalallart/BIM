@@ -17,13 +17,13 @@ Pour installer notre projet voici les étapes à suivre:
    [https://vcpkg.io/en/getting-started.html](https://vcpkg.io/en/getting-started.html "https://vcpkg.io/en/getting-started.html")
 2. Suivre les instructions de VCPKG
 3. Installer les trois librairies:
-   -vcpkg install boost --triplet x64-windows
-   -vcpkg install wxWidgets --triplet x64-windows
-   -vcpkg install sqlite3 --triplet x64-windows
+   -vcpkg install boost --triplet x64-linux
+   -vcpkg install wxWidgets --triplet x64-linux
+   -vcpkg install sqlite3 --triplet x64-linux
 >Ces lignes sont pour le compilateur msvc
    4. Rajouter la ligne ci-dessous dans les options de lancement de cmake
       ```
-       -DCMAKE_TOOLCHAIN_FILE="[PATH TO VCPKG]/scripts/buildsystems/vcpkg.cmake" -DVCPKG_TARGET_TRIPLET="x64-windows"
+       -DCMAKE_TOOLCHAIN_FILE="[PATH TO VCPKG]/scripts/buildsystems/vcpkg.cmake" -DVCPKG_TARGET_TRIPLET="x64-linux"
       ```
 
 

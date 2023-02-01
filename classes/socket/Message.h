@@ -29,14 +29,14 @@ enum class messageTypes: uint32_t
     ClientRespondUpdate
 };
 
-struct header {
+struct Header {
     int ID;
     messageTypes type;
     uint32_t size = 0;
 };
 
 struct Message {
-    header header;
+    Header header;
     std::vector<uint8_t> body;
 
     size_t size() const

@@ -105,7 +105,7 @@ public:
 private:
     void writeHeader()
     {
-        async_write(socket, buffer(&messagesOutQueue.front().header, sizeof(header)),
+        async_write(socket, buffer(&messagesOutQueue.front().header, sizeof(Header)),
             [this](std::error_code ec, size_t length)
             {
                 if (!ec)
@@ -153,7 +153,7 @@ private:
 
     void readHeader()
     {
-        async_read(socket, buffer(&asyncMessageTmp.header, sizeof(header)),
+        async_read(socket, buffer(&asyncMessageTmp.header, sizeof(Header)),
            [this](std::error_code ec, size_t length)
            {
 
